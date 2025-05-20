@@ -1,32 +1,32 @@
 {
   "profile": {
-    "name": "Yorlg",
-    "bio": "欢迎来到我的个人主页.",
-    "avatar": "/avatar.png"
+    "name": "呦呦鹿鸣",
+    "bio": "欢迎来到小鹿的主页.",
+    "avatar": "https://vip.123pan.cn/1816125706/ymjew503t0m000d7w32xorfu3sjx3tvrDIYPAqevAIUOApxPDwYvAF==.webp"
   },
   "socialLinks": [
     {
       "id": "github",
       "platform": "GitHub",
-      "url": "https://github.com/Yorlg",
+      "url": "https://github.com/lifanultra",
       "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22'></path></svg>"
     },
     {
       "id": "email",
       "platform": "Email",
-      "url": "mailto:i@yorlg.net",
+      "url": "mailto:hello@lifan.uno",
       "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='currentColor' d='M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm8-7L4 8v10h16V8zm0-2l8-5H4zM4 8V6v12z'/></svg>"
     },
     {
       "id": "x",
       "platform": "Twitter",
-      "url": "https://x.com/Yorlg233",
+      "url": "https://x.com/lifanultra",
       "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path fill='currentColor' d='m17.687 3.063l-4.996 5.711l-4.32-5.711H2.112l7.477 9.776l-7.086 8.099h3.034l5.469-6.25l4.78 6.25h6.102l-7.794-10.304l6.625-7.571zm-1.064 16.06L5.654 4.782h1.803l10.846 14.34z'/></svg>"
     },
     {
       "id": "telegram",
       "platform": "Telegram",
-      "url": "https://t.me/Yorlg233",
+      "url": "https://t.me/lifanultra",
       "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><rect width='24' height='24' fill='none'/><path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m11.985 15.408l3.242 3.686c1.2 1.365 1.801 2.048 2.43 1.881c.628-.166.844-1.064 1.275-2.861l2.39-9.968c.665-2.768.997-4.151.259-4.834s-2.017-.175-4.575.84L5.14 8.865c-2.046.813-3.069 1.219-3.134 1.917a1 1 0 0 0 0 .214c.063.699 1.084 1.108 3.128 1.927c.925.371 1.388.557 1.72.912q.056.06.108.124c.306.38.436.88.697 1.876l.489 1.867c.253.97.38 1.456.713 1.522s.622-.336 1.201-1.141zm0 0l-.317-.33c-.362-.378-.543-.566-.543-.8s.18-.423.543-.8l3.573-3.724' color='currentColor'/></svg>"
     }
   ],
@@ -34,7 +34,7 @@
     {
       "id": "blog",
       "title": "博客",
-      "url": "https://blog.yorlg.it/",
+      "url": "https://www.lifan.icu/",
       "description": "我的小本本"
     }
   ]
