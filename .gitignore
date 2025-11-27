@@ -17,6 +17,7 @@
 /build
 /.vercel/
 /.wrangler/
+.open-next
 
 # 其他
 .DS_Store
