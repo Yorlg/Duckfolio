@@ -1,17 +1,24 @@
-import { ProfileConfig } from '@/types/platform-config';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { getConfig } from '@/lib/config';
+import { ProfileConfig } from '@/types/platform-config';
 
-const config = getConfig();
+interface ProfileState extends ProfileConfig {
+  setInitialData: (data: ProfileConfig) => void;
+}
 
-export const useProfileStore = create<ProfileConfig>()(
-  persist<ProfileConfig>(
-    () => ({
-      profile: config.profile,
-      socialLinks: config.socialLinks,
-      websiteLinks: config.websiteLinks,
-    }),
-    { name: 'duckfolio-storage' }
-  )
-);
+export const useProfileStore = create<ProfileState>((set) => ({
+  profile: {
+    avatar: '',
+    name: '',
+    bio: '',
+  },
+  socialLinks: [],
+  websiteLinks: [],
+
+  setInitialData: (data: ProfileConfig) => {
+    set({
+      profile: data.profile,
+      socialLinks: data.socialLinks,
+      websiteLinks: data.websiteLinks,
+    });
+  },
+}));

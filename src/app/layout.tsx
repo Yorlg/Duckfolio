@@ -12,14 +12,14 @@ const inter = Inter({ subsets: ['latin'] });
 export function generateMetadata(): Promise<Metadata> {
   const config = getConfig();
 
-  return Promise.resolve({
+  return {
     title: config.profile.name,
     description: config.profile.bio,
     icons: {
       icon: '/logo.png',
       shortcut: '/logo.png',
     },
-  });
+  };
 }
 
 export default function RootLayout({
