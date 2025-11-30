@@ -33,7 +33,6 @@
     "zustand": "^5.0.4"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.12",
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.6",
     "@types/node": "^20.17.46",
@@ -70,10 +69,8 @@
     },
     "onlyBuiltDependencies": [
       "@tailwindcss/oxide",
-      "esbuild",
       "sharp",
-      "unrs-resolver",
-      "workerd"
+      "unrs-resolver"
     ]
   }
 }
