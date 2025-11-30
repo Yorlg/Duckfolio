@@ -54,6 +54,7 @@ export function ModeToggle() {
             {
               duration: 400,
               easing: 'ease-out',
+              fill: 'forwards',
               pseudoElement: isDark
                 ? '::view-transition-old(root)'
                 : '::view-transition-new(root)',
