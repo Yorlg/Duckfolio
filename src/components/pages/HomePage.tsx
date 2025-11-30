@@ -1,28 +1,26 @@
 'use client';
 
-import {useRef} from "react";
-import {AnimatePresence, motion} from "framer-motion";
+import { useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
-import {Navigation} from "@/components/layout/Navigation";
-import {Profile} from "@/components/layout/Profile";
-import {Links} from "@/components/links/Links";
-import {Footer} from "@/components/layout/Footer";
-import {useSwipeNavigation} from "@/hooks/useSwipeNavigation";
-import {ProfileConfig} from "@/types/platform-config";
-import {useProfileStore} from "@/lib/store";
+import { Navigation } from "@/components/layout/Navigation";
+import { Profile } from "@/components/layout/Profile";
+import { Links } from "@/components/links/Links";
+import { Footer } from "@/components/layout/Footer";
+import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
+import { ProfileConfig } from "@/types/platform-config";
+import { useProfileStore } from "@/lib/store";
 
 export function HomePage(initialData: ProfileConfig) {
-  const {activeSection, setActiveSection, dragProps} =
+  const { activeSection, setActiveSection, dragProps } =
     useSwipeNavigation('profile');
 
-  const setInitialData = useProfileStore((state) => state.setInitialData)
-  const initialized = useRef(false);
-  if (!initialized.current) {
+  const setInitialData = useProfileStore((state) => state.setInitialData);
+  useEffect(() => {
     setInitialData(initialData);
-    initialized.current = true;
-  }
+  }, [initialData, setInitialData]);
 
-  const {profile, socialLinks, websiteLinks} = useProfileStore();
+  const { profile, socialLinks, websiteLinks } = useProfileStore();
 
   return (
     <div
@@ -45,12 +43,12 @@ export function HomePage(initialData: ProfileConfig) {
               key="profile"
             />
           ) : (
-            <Links websiteLinks={websiteLinks} key="links"/>
+            <Links websiteLinks={websiteLinks} key="links" />
           )}
         </AnimatePresence>
       </motion.main>
 
-      <Footer name={profile.name}/>
+      <Footer name={profile.name} />
     </div>
   );
 }
