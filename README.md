@@ -62,42 +62,11 @@ pnpm build
 # 启动服务器
 pnpm dev
 ```
-### 2. 使用 Docker 部署
 
-```bash
-docker pull yorlg/duckfolio:latest
-docker run -p 3000:3000 -v /root/duckfolio/platform-config.json:/app/public/platform-config.json yorlg/duckfolio:latest
-```
-访问 http://localhost:3000
+### 2. 部署到 Cloudflare Pages
 
-### 3. 使用 Docker Compose 部署
-- 创建 `platform-config.json` 文件，内容参考 [platform-config.json](public/platform-config.json)
-- 创建 `docker-compose.yml` 文件，配置请参考：[docker-compose 的示例](docker-compose.yml)
-- 在 `docker-compose.yml` 中，确保将 `platform-config.json` 挂载到容器的 `/app/public/platform-config.json` 路径
-  
-```bash
-docker-compose up -d
-```
+要想部署到 Cloudflare，请参阅该文档：[将 Duckfolio 部署到 Cloudflare](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-cloudflare.md)
 
-### 4. 部署到 Cloudflare Pages
+### 3. 部署到 Vercel
 
-要想部署到 Cloudflare Pages，请参阅该文档：[将 Duckfolio 部署到 Cloudflare Pages](https://github.com/Yorlg/Duckfolio/blob/cf-pages/docs/deploy-to-cloudflare-pages.md)
-
-### 5. 部署到 Vercel
-
-要想部署到 Vercel，请参阅该文档：[将 Duckfolio 部署到 Vercel](https://github.com/Yorlg/Duckfolio/blob/cf-pages/docs/deploy-to-vercel.md)
-
-### 6. 自行构建 Docker 镜像
-
-```bash
-$ git clone https://github.com/Yorlg/Duckfolio.git
-cd duckfolio
-
-# 构建镜像
-$ docker build -t duckfolio .
-
-# 启动容器
-$ docker run -p 3000:3000 duckfolio
-```
-
-项目的配置文件位于 `public/platform-config.json`，你可以在这里修改个人信息、社交链接等内容。
+要想部署到 Vercel，请参阅该文档：[将 Duckfolio 部署到 Vercel](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-vercel.md)
