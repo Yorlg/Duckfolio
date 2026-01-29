@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: dev
+  branch: deploy
 media_folder: public/images
 public_folder: /images
 collections:

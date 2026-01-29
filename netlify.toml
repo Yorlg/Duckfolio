@@ -1,11 +1,11 @@
 [build]
   command = "pnpm build"
   publish = ".next"
-  # 指定使用 dev 分支部署
+  # 指定使用 deploy 分支部署
   base = "/"
 
 [context.production]
-  # 生产环境使用 dev 分支
+  # 生产环境使用 deploy 分支
 
 [[redirects]]
   from = "/admin/*"
