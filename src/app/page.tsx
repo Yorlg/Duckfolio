@@ -1,5 +1,5 @@
 import { getConfig } from "@/lib/config";
-import { HomePage } from "@/components/pages/HomePage";
+import { HomePage } from '@/components/features/profile';
 
 export default async function Home() {
   const config = await getConfig();

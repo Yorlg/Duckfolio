@@ -47,10 +47,26 @@
 
 ## 🚀 快速开始
 
-### 部署到 Cloudflare Pages
+### 1. 克隆仓库
 
-要想部署到 Cloudflare Pages，请参阅该文档：[将 Duckfolio 部署到 Cloudflare Pages](docs/deploy-to-cloudflare-pages.md)
+```bash
+git clone https://github.com/Yorlg/Duckfolio.git
+cd duckfolio
 
-### 部署到 Vercel
+# 安装依赖
+pnpm install
 
-要想部署到 Vercel，请参阅该文档：[将 Duckfolio 部署到 Vercel](docs/deploy-to-vercel.md)
+# 项目打包
+pnpm build
+
+# 启动服务器
+pnpm dev
+```
+
+### 2. 部署到 Cloudflare Pages
+
+要想部署到 Cloudflare，请参阅该文档：[将 Duckfolio 部署到 Cloudflare](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-cloudflare.md)
+
+### 3. 部署到 Vercel
+
+要想部署到 Vercel，请参阅该文档：[将 Duckfolio 部署到 Vercel](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-vercel.md)
