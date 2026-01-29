@@ -1,12 +1,32 @@
+'use client';
+
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { PanInfo } from 'framer-motion';
 
-type SectionType = 'profile' | 'links';
+type SectionType = 'profile' | 'links' | 'blog';
 
-export function useSwipeNavigation(initialSection: SectionType = 'profile') {
-  const [activeSection, setActiveSection] =
-    useState<SectionType>(initialSection);
+const routeMap: Record<SectionType, string> = {
+  profile: '/',
+  links: '/links',
+  blog: '/posts',
+};
+
+const pathToSection: Record<string, SectionType> = {
+  '/': 'profile',
+  '/links': 'links',
+  '/posts': 'blog',
+};
+
+export function useSwipeNavigation() {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
+
+  // 根据当前路径确定 section
+  const activeSection = useMemo(() => {
+    return pathToSection[pathname] || 'profile';
+  }, [pathname]);
 
   // 检测是否为移动设备
   useEffect(() => {
@@ -36,13 +56,21 @@ export function useSwipeNavigation(initialSection: SectionType = 'profile') {
       const isRightSwipe =
         offset.x > swipeThreshold || velocity.x > velocityThreshold;
 
-      if (isLeftSwipe && activeSection === 'profile') {
-        setActiveSection('links');
-      } else if (isRightSwipe && activeSection === 'links') {
-        setActiveSection('profile');
+      if (isLeftSwipe) {
+        if (activeSection === 'profile') {
+          router.push('/links');
+        } else if (activeSection === 'links') {
+          router.push('/posts');
+        }
+      } else if (isRightSwipe) {
+        if (activeSection === 'blog') {
+          router.push('/links');
+        } else if (activeSection === 'links') {
+          router.push('/');
+        }
       }
     },
-    [isMobile, activeSection]
+    [isMobile, activeSection, router],
   );
 
   const dragProps = useMemo(
@@ -52,12 +80,11 @@ export function useSwipeNavigation(initialSection: SectionType = 'profile') {
       dragElastic: 0.2,
       onDragEnd: handleDragEnd,
     }),
-    [isMobile, handleDragEnd]
+    [isMobile, handleDragEnd],
   );
 
   return {
     activeSection,
-    setActiveSection,
     isMobile,
     dragProps,
   };

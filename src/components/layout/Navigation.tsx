@@ -1,17 +1,29 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Dispatch, SetStateAction } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-type SectionType = 'profile' | 'links';
-interface NavigationProps {
-  activeSection: SectionType;
-  setActiveSection: Dispatch<SetStateAction<SectionType>>;
-}
+const navItems = [
+  { name: 'profile', href: '/' },
+  { name: 'links', href: '/links' },
+  { name: 'blog', href: '/posts' },
+];
 
-export function Navigation({
-  activeSection,
-  setActiveSection,
-}: NavigationProps) {
+export function Navigation() {
+  const pathname = usePathname();
+
+  const getActiveSection = () => {
+    if (pathname === '/') return 'profile';
+    if (pathname.startsWith('/links')) return 'links';
+    if (pathname.startsWith('/posts') || pathname.startsWith('/blog'))
+      return 'blog';
+    return 'profile';
+  };
+
+  const activeSection = getActiveSection();
+
   return (
     <nav className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-4 sm:py-6 flex justify-between items-center">
       <motion.div
@@ -33,7 +45,9 @@ export function Navigation({
         }}
         className="text-xl font-medium"
       >
-        <Image src="/logo.png" alt="Logo" width={40} height={40} priority />
+        <Link href="/">
+          <Image src="/logo.png" alt="Logo" width={40} height={40} priority />
+        </Link>
       </motion.div>
 
       <motion.div
@@ -42,25 +56,25 @@ export function Navigation({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
       >
-        {['profile', 'links'].map((section) => (
-          <button
-            key={section}
+        {navItems.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
             className={`text-sm uppercase tracking-wider transition-colors ${
-              activeSection === section
+              activeSection === item.name
                 ? 'text-[#121212] dark:text-white'
                 : 'text-[#121212]/60 dark:text-white/60 hover:text-[#121212] dark:hover:text-white'
             }`}
-            onClick={() => setActiveSection(section as SectionType)}
           >
-            {section}
-            {activeSection === section && (
+            {item.name}
+            {activeSection === item.name && (
               <motion.div
                 className="h-0.5 bg-[#121212] dark:bg-white mt-1"
                 layoutId="activeSection"
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               />
             )}
-          </button>
+          </Link>
         ))}
       </motion.div>
     </nav>

@@ -1,3 +1,5 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Profile as ProfileType, SocialLink } from '@/types/platform-config';
@@ -66,7 +68,7 @@ export function Profile({ profile, socialLinks }: ProfileProps) {
                 >
                   {char === ' ' ? '\u00A0' : char}
                 </motion.span>
-              )
+              ),
             )}
           </h1>
           <p className="text-base sm:text-lg text-[#121212]/80 dark:text-white/80 max-w-lg mx-auto md:mx-0">

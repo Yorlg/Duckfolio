@@ -1,3 +1,5 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import { ExternalLink, ChevronRight } from 'lucide-react';
 import { WebsiteLink } from '@/types/platform-config';
@@ -8,14 +10,7 @@ interface LinksProps {
 
 export function Links({ websiteLinks }: LinksProps) {
   return (
-    <motion.div
-      key="links"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="mx-auto w-full pt-24 md:pt-32 pb-16"
-    >
+    <div className="mx-auto w-full pt-24 md:pt-32 pb-16">
       <motion.h2
         className="text-2xl sm:text-3xl font-bold mb-8 md:mb-12 flex items-center"
         initial={{ opacity: 0, y: 20 }}
@@ -63,6 +58,6 @@ export function Links({ websiteLinks }: LinksProps) {
           </motion.a>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
