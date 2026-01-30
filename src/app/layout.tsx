@@ -10,7 +10,7 @@ import { RootLayoutClient } from '@/components/layout/RootLayoutClient';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export function generateMetadata(): Promise<Metadata> {
+export function generateMetadata(): Metadata {
   const config = getConfig();
 
   return {
