@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { remark } from 'remark';
-import html from 'remark-html';
+import remarkGfm from 'remark-gfm';
+import remarkHtml from 'remark-html';
 
 interface BlogPost {
   slug: string;
@@ -42,7 +43,10 @@ export default function BlogPostPage({
       .then(async (data) => {
         setPost(data);
         // 将 markdown 转换为 HTML
-        const processedContent = await remark().use(html).process(data.content);
+        const processedContent = await remark()
+          .use(remarkGfm)
+          .use(remarkHtml, { sanitize: false })
+          .process(data.content);
         setHtmlContent(processedContent.toString());
         setLoading(false);
       })
@@ -134,14 +138,7 @@ export default function BlogPostPage({
         </header>
 
         <div
-          className="prose prose-lg dark:prose-invert max-w-none
-            prose-headings:text-[#121212] dark:prose-headings:text-white
-            prose-p:text-[#121212]/80 dark:prose-p:text-white/80
-            prose-a:text-[#121212] dark:prose-a:text-white
-            prose-strong:text-[#121212] dark:prose-strong:text-white
-            prose-code:text-[#121212] dark:prose-code:text-white
-            prose-pre:bg-[#121212]/5 dark:prose-pre:bg-white/5
-            prose-blockquote:border-[#121212]/20 dark:prose-blockquote:border-white/20"
+          className="prose prose-lg dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
       </article>
