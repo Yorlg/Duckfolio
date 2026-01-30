@@ -1,11 +1,8 @@
 [build]
   command = "pnpm build"
-  publish = ".next"
-  # 指定使用 main 分支部署
-  base = "/"
 
-[context.production]
-  # 生产环境使用 main 分支
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [[redirects]]
   from = "/admin/*"
