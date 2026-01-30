@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { ModeToggle } from '@/components/theme/toggle-theme';
-import { CustomCursor } from '@/components/interactive/custom-cursor';
+// import { CustomCursor } from '@/components/interactive/custom-cursor';
 import { RootLayoutClient } from '@/components/layout/RootLayoutClient';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -40,7 +40,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ModeToggle />
-          <CustomCursor />
+          {/* <CustomCursor /> */}
           <RootLayoutClient>{children}</RootLayoutClient>
         </ThemeProvider>
       </body>

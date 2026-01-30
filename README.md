@@ -63,10 +63,6 @@ pnpm build
 pnpm dev
 ```
 
-### 2. 部署到 Cloudflare Pages
+### 2. 部署到 Netlify
 
-要想部署到 Cloudflare，请参阅该文档：[将 Duckfolio 部署到 Cloudflare](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-cloudflare.md)
-
-### 3. 部署到 Vercel
-
-要想部署到 Vercel，请参阅该文档：[将 Duckfolio 部署到 Vercel](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-vercel.md)
+要想部署到 Netlify，请参阅该文档：[将 Duckfolio 部署到 Netlify](https://github.com/Yorlg/Duckfolio/blob/main/docs/deploy-to-netlify.md)

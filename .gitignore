@@ -15,9 +15,9 @@
 
 # 生产环境
 /build
-/.vercel/
-/.wrangler/
-/.open-next/
+
+# Netlify
+/.netlify/
 
 # 其他
 .DS_Store
