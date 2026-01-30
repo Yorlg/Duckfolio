@@ -10,8 +10,8 @@ import { RootLayoutClient } from '@/components/layout/RootLayoutClient';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const config = await getConfig();
+export function generateMetadata(): Metadata {
+  const config = getConfig();
 
   return {
     title: config.profile.name,
