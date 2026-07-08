@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { ModeToggle } from '@/components/theme/toggle-theme';
 // import { CustomCursor } from '@/components/interactive/custom-cursor';
 import { RootLayoutClient } from '@/components/layout/RootLayoutClient';
+import { Analytics } from '@vercel/analytics/next';
 
 export function generateMetadata(): Metadata {
   const config = getConfig();
@@ -38,6 +39,7 @@ export default function RootLayout({
           {/* <CustomCursor /> */}
           <RootLayoutClient>{children}</RootLayoutClient>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
