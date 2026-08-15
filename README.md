@@ -1,3 +1,5 @@
+
+
 # 🦆 Duckfolio
 
 **Duckfolio** 是一个简洁、现代、有趣的个人主页模板。
@@ -9,7 +11,7 @@
 
 ## ✨ 项目特色
 
-- 🚀 使用 **Next.js 15 + Turbopack**，极速开发体验
+- 🚀 使用 **Next.js 16 + Turbopack**，极速开发体验
 - 🎨 采用 **Tailwind CSS 4** 实现原子化、响应式布局
 - 🌗 支持 **深色/浅色主题自动切换**
 - 💫 利用 **Framer Motion** 增添自然平滑的过渡动画
@@ -124,4 +126,3 @@ pnpm dev
 pnpm build
 pnpm start
 ```
-
