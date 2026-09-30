@@ -12,7 +12,5 @@ export function HomePage(initialData: ProfileConfig) {
     setInitialData(initialData);
   }, [initialData, setInitialData]);
 
-  const { profile, socialLinks } = useProfileStore();
-
-  return <Profile profile={profile} socialLinks={socialLinks} />;
+  return <Profile profile={initialData.profile} socialLinks={initialData.socialLinks} />;
 }

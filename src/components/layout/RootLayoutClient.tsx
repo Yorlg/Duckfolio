@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { Navigation } from '@/components/layout/Navigation';
 import { Footer } from '@/components/layout/Footer';
+import { LanguageToggle } from '@/components/layout/LanguageToggle';
 import { useSwipeNavigation } from '@/lib/useSwipeNavigation';
 import { useProfileStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
@@ -22,6 +23,7 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-clip text-[#121212] dark:text-[#f0f0f0]">
       {!isAdmin && <Navigation />}
+      <LanguageToggle />
 
       <motion.main
         className={cn(
@@ -33,7 +35,7 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
       >
         <motion.div
           key={pathname}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{

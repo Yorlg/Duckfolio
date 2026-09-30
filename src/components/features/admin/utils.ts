@@ -49,35 +49,42 @@ export function parseDateTime(value: string) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-export function formatDateTimeLabel(value: string) {
+export function formatDateTimeLabel(
+  value: string,
+  t: (source: string, params?: Record<string, string | number>) => string,
+  language: 'zh-CN' | 'en',
+) {
   const date = parseDateTime(value);
 
   if (!date) {
-    return '日期无效';
+    return t("invalidDate");
   }
 
-  return date.toLocaleDateString('zh-CN', {
+  return date.toLocaleDateString(language, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
   });
 }
 
-export function formatPostDate(value: string) {
+export function formatPostDate(
+  value: string,
+  language: 'zh-CN' | 'en',
+  t: (source: string, params?: Record<string, string | number>) => string,
+) {
   const date = parseDateTime(value);
 
   if (!date) {
-    return '未知日期';
+    return t("unknownDate");
   }
 
-  return date.toLocaleDateString('zh-CN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  return date.toLocaleDateString(language);
 }
 
-export function getMonthlyPostCounts(posts: AdminPostSummary[]) {
+export function getMonthlyPostCounts(
+  posts: AdminPostSummary[],
+  language: 'zh-CN' | 'en',
+) {
   const now = new Date();
 
   return Array.from({ length: 6 }, (_, index) => {
@@ -96,7 +103,7 @@ export function getMonthlyPostCounts(posts: AdminPostSummary[]) {
 
     return {
       count,
-      label: String(month + 1) + '月',
+      label: date.toLocaleDateString(language, { month: 'short' }),
     };
   });
 }

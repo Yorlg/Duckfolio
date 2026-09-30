@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { TerminalSquare } from 'lucide-react';
 import { ConfigIcon } from '@/lib/icon-registry';
+import { useTranslation } from 'react-i18next';
 import type { ProjectLink, ProjectSection } from '@/types/platform-config';
 
 function getSectionId(title: string) {
@@ -17,6 +18,7 @@ export function Projects({
 }: {
   projectSections: ProjectSection[];
 }) {
+  const { t } = useTranslation();
   const visibleSections = projectSections.filter(
     (section) => section.title && section.projects.length > 0,
   );
@@ -25,15 +27,15 @@ export function Projects({
     <div className="relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
       <motion.header
         className="mx-auto mb-16 max-w-4xl text-center"
-        initial={{ opacity: 0, y: 18 }}
+        initial={{ opacity: 1, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
       >
         <h1 className="text-4xl font-semibold tracking-normal text-[#121212] dark:text-white">
-          Projects
+          {t('projects.heading')}
         </h1>
         <p className="mt-3 text-lg italic text-[#121212]/45 dark:text-white/45">
-          Projects that I created or maintain.
+          {t('projects.description')}
         </p>
         <div className="mx-auto mt-10 h-px w-12 bg-[#121212]/15 dark:bg-white/15" />
       </motion.header>
@@ -44,7 +46,7 @@ export function Projects({
             <button
               className="mb-4 flex size-8 items-center justify-center text-[#121212]/75 transition-colors hover:text-[#121212] dark:text-white/70 dark:hover:text-white"
               type="button"
-              aria-label="Project categories"
+              aria-label={t('projects.categories')}
             >
               <span className="grid w-4 gap-1">
                 <span className="h-px w-full bg-current" />
@@ -72,7 +74,7 @@ export function Projects({
               key={section.title}
               id={getSectionId(section.title)}
               className="relative scroll-mt-28"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 1, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.5,

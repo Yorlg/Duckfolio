@@ -1,0 +1,210 @@
+nav:
+  profile: Profile
+  links: Links
+  blog: Blog
+  projects: Projects
+profile:
+  greeting: "Hello, "
+  introduction: "I'm "
+links:
+  heading: My Links
+projects:
+  heading: Projects
+  description: Projects that I created or maintain.
+  categories: Project categories
+blog:
+  empty: No posts yet
+  create: Create your first post →
+post:
+  back: Back
+footer:
+  copyright: All rights reserved.
+language:
+  switch: 切换到中文
+admin:
+  dashboard: Dashboard
+  contentOverviewAndPublishingStatus: Content overview and publishing status.
+  loadingOverviewData: Loading overview data...
+  totalPosts: Total posts
+  publicPosts: Public posts
+  draftPosts: Draft posts
+  publishingTrend: Publishing trend
+  postCountOverTheLastSixMonths: Post count over the last six months.
+  postStatus: Post status
+  publicToDraftRatio: Public-to-draft ratio.
+  public: Public
+  draft: Draft
+  countPosts: "{{count}} posts"
+  nameCountPosts: "{{name}}: {{count}} posts"
+  nameCountPostsPercentage: "{{name}}: {{count}} posts ({{percentage}}%)"
+  noPosts: No posts
+  postList: Post list
+  postDirectoryDescription: The posts directory in the current publishing target.
+  refresh: Refresh
+  newPost: New post
+  loadingPostList: Loading post list...
+  editPost: Edit post
+  makePublic: Make public
+  makeDraft: Make draft
+  viewPost: View post
+  deletePost: Delete post
+  noPostsInTargetBranch: No posts are available in the current target branch. Confirm GITHUB_REPO and GITHUB_BRANCH point to your deploy branch, then refresh.
+  editingPostsSlugMd: Editing posts/{{slug}}.md
+  title: Title
+  postPath: Post path
+  publishDate: Publish date
+  tags: Tags
+  summary: Summary
+  saveAsDraft: Save as draft
+  draftVisibilityHint: "When checked, the post is written to the posts directory but is not displayed publicly as draft: true."
+  cancel: Cancel
+  updatePost: Update post
+  publishPost: Publish post
+  add: Add
+  startWriting: Start writing...
+  exitFullscreenWriting: Exit fullscreen writing
+  fullscreenWriting: Fullscreen writing
+  invalidDate: Invalid date
+  unknownDate: Unknown date
+  modelKeyHint: Models for this Base URL will load after you enter an API key.
+  loadingModelList: Loading model list...
+  failedToLoadModelList: Failed to load model list.
+  loadedCountModels: Loaded {{count}} models.
+  noModelsFoundYouCanEnterAModelID: No models found. You can enter a Model ID manually.
+  getLabel: Get {{label}}
+  hide: Hide
+  show: Show
+  settings: Settings
+  configureAIAPIKeysAndPreferences: Configure AI API keys and preferences.
+  aIAPIKey: AI API Key
+  baseURLAPIEndpoint: Base URL (API endpoint)
+  model: Model
+  searchModels: Search models...
+  loadingModels: Loading models...
+  noModelsFound: No models found.
+  modelID: Model ID
+  saveSettings: Save settings
+  settingsSessionHint: Configuration is stored only for this browser tab session and is cleared when the tab closes.
+  mediaLibrary: Media library
+  failedToLoadMediaList: Failed to load media list.
+  failedToUploadName: Failed to upload {{name}}.
+  filesUploadedSuccessfully: Files uploaded successfully.
+  failedToUploadFiles: Failed to upload files.
+  confirmDeleteMedia: Delete {{path}}? This action will be committed to the target branch.
+  failedToDeleteMediaFile: Failed to delete media file.
+  mediaFileDeleted: Media file deleted.
+  linkCopied: Link copied.
+  uploadFiles: Upload files
+  loading: Loading...
+  noMediaFiles: No media files.
+  copyLink: Copy link
+  delete: Delete
+  addGroup: Add group
+  addProject: Add project
+  avatarPath: Avatar path
+  bio: Bio
+  deleteGroup: Delete group
+  deleteProject: Delete project
+  description: Description
+  groups: groups
+  icon: Icon
+  nextPage: Next page
+  page: Page
+  previousPage: Previous page
+  searchIcons: Search icons...
+  currentIcon: Current icon
+  items: items
+  name: Name
+  noProjectGroupsYet: No project groups yet.
+  thisGroupHasNoProjectsYet: This group has no projects yet.
+  noSocialLinksYet: No social links yet.
+  noWebsiteLinksYet: No website links yet.
+  platform: Platform
+  siteNameAvatarAndBio: Site name, avatar, and bio.
+  basic: Basic
+  basicInformation: Basic information
+  projectsDescription: Project categories and projects displayed on the Projects page.
+  projectGroups: Project groups
+  saveConfiguration: Save configuration
+  groupID: Group ID
+  groupTitle: Group title
+  socialLinksDescription: Social platform links displayed on the home page.
+  socialLinks: Social links
+  websiteLinksDisplayedOnTheLinksPage: Website links displayed on the Links page.
+  websiteLinks: Website links
+  failedToUploadSiteImage: Failed to upload site image.
+  avatarSavedHint: Avatar replaced; save the configuration to use the new avatar path.
+  logoReplaced: Logo replaced.
+  uploadAvatarPNG: Upload avatar (PNG)
+  uploadLogoPNG: Upload Logo (PNG)
+  currentAvatar: Current avatar
+  currentLogo: Current Logo
+  replaceAvatar: Replace avatar
+  replaceLogo: Replace Logo
+  siteImageDeploymentHint: Images directly overwrite public/avatar.png or public/logo.png; GitHub mode takes effect after deployment. Save the site configuration after uploading an avatar.
+  noMatchingIconsFound: No matching icons found.
+  enterAdminPassword: Please enter the administrator passphrase.
+  enterAdministratorPassphrase: Enter administrator passphrase
+  incorrectAdminPassword: The administrator passphrase is incorrect.
+  failedToLoadAdminStatus: Failed to load admin status.
+  loadingPublishingTarget: Loading publishing target
+  localConfigurationEditingMode: Local configuration editing mode
+  missingAdminPasswordNotice: ADMIN_PASSWORD was not detected. Write requests will be rejected. Configure it in your deployment platform environment variables; do not commit it to the repository.
+  missingGitHubConfigNotice: GitHub write configuration was not detected. Publishing posts will not create a posts directory in the local main workspace. When GITHUB_BRANCH is not configured, deploy is used by default.
+  failedToLoadThePostList: Failed to load the post list.
+  adminPasswordRequired: Please enter the administrator passphrase first.
+  failedToLoadThePost: Failed to load the post.
+  failedToUpdatePostStatus: Failed to update post status.
+  postStatusUpdated: Post status updated.
+  confirmDeletePost: Delete posts/{{slug}}.md? This action will commit to the target branch.
+  failedToDeleteThePost: Failed to delete the post.
+  postDeleted: Post deleted.
+  failedToPublishThePost: Failed to publish the post.
+  pushedToRepoPath: Pushed to {{repo}}/{{path}}
+  writtenToPath: Written to {{path}}
+  postSaved: Post saved.
+  failedToSaveConfiguration: Failed to save configuration.
+  configurationPushedToRepoPath: Configuration pushed to {{repo}}/{{path}}
+  configurationWrittenToPath: Configuration written to {{path}}
+  configurationSaved: Configuration saved.
+  administratorVerification: Administrator verification
+  verifying: Verifying…
+  enterAdminPanel: Enter admin panel
+  backToHome: Back to home
+  contentManagement: Content management
+  actions: Actions
+  logOut: Log out
+  siteConfiguration: Site configuration
+  invalidAdminPasswordResponse: Administrator passphrase is incorrect or not configured; check ADMIN_PASSWORD.
+  permissionDenied: Permission denied; check your administrator passphrase.
+  adminApiNotFound: Admin API not found; confirm /api/admin/* routes are deployed.
+  adminApiUnexpectedHtml: Admin API returned HTML instead of JSON; check the /api/admin/* routes in your Vercel deployment.
+  invalidAdminPassword: Administrator passphrase is not configured or is incorrect.
+  enterAValidPostPath: Enter a valid post path.
+  localPostDeleteBlocked: GitHub write access is not configured; deleting posts in local main is blocked.
+  postNotFound: Post not found.
+  localMediaDeleteBlocked: GitHub write access is not configured; deleting media files locally is blocked.
+  localPostCreateBlocked: GitHub write access is not configured; creating posts in local main is blocked.
+  gitHubWriteFailed: GitHub write failed.
+  writingToThisPathIsNotAllowed: Writing to this path is not allowed.
+  localWriteRestricted: Local mode only allows saving site configuration and media files.
+  readingFromThisPathIsNotAllowed: Reading from this path is not allowed.
+  postSetToDraft: Post set to draft.
+  postMadePublic: Post made public.
+  failedToUpdateThePost: Failed to update the post.
+  postPublished: Post published.
+  postUpdated: Post updated.
+  failedToDeleteTheOldPostPath: Failed to delete the old post path.
+  configurationSaveSucceeded: Configuration saved.
+  enterAPostTitle: Enter a post title.
+  postBodyCannotBeEmpty: Post body cannot be empty.
+  selectAFileToUpload: Select a file to upload.
+  fileCannotBeEmpty: File cannot be empty.
+  fileMustBe50MBOrSmaller: File must be 50 MB or smaller.
+  unsupportedFileType: Unsupported file type.
+  specifyAMediaPathToDelete: Specify a media path to delete.
+  selectAnAvatarOrLogo: Select an avatar or Logo.
+  uploadAPNGImageNoLargerThan5MB: Upload a PNG image no larger than 5 MB.
+  invalidPNGImageContent: Invalid PNG image content.
+  siteImageUpdated: Site image updated.
+  postSavedOldPathCleanupFailed: "Post saved, but removing the previous path failed: {{reason}}"

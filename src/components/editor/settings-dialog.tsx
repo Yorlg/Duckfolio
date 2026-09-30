@@ -41,6 +41,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { adminMessageKeys } from '@/lib/admin/message-keys';
 
 import { aiChatPlugin } from './plugins/ai-kit';
 
@@ -227,8 +229,9 @@ export const models: Model[] = [
 export function SettingsDialog() {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
+  const { t, i18n } = useTranslation('admin');
+  const language: 'en' | 'zh-CN' = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-CN';
   const editor = useEditorRef();
-
   const [tempModelId, setTempModelId] = React.useState(models[7].value);
   const [tempKeys, setTempKeys] = React.useState<Record<string, string>>({
     aiBaseUrl: '',
@@ -344,7 +347,7 @@ export function SettingsDialog() {
 
     if (!apiKey) {
       setAvailableModels([]);
-      setModelFetchStatus('填写 API Key 后会读取该 Base URL 的模型。');
+      setModelFetchStatus(t("modelKeyHint"));
       setIsLoadingModels(false);
       return;
     }
@@ -352,7 +355,7 @@ export function SettingsDialog() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => {
       setIsLoadingModels(true);
-      setModelFetchStatus('正在读取模型列表...');
+      setModelFetchStatus(t("loadingModelList"));
 
       void fetch('/api/ai/models', {
         body: JSON.stringify({ apiKey, baseURL }),
@@ -369,7 +372,7 @@ export function SettingsDialog() {
           };
 
           if (!response.ok) {
-            throw new Error(data.message || '模型列表读取失败。');
+            throw new Error(data.message ? t(adminMessageKeys[data.message] ?? data.message) : t('failedToLoadModelList'));
           }
 
           const nextModels = (data.models || []).filter((model) => model.value);
@@ -377,8 +380,8 @@ export function SettingsDialog() {
           setAvailableModels(nextModels);
           setModelFetchStatus(
             nextModels.length
-              ? `已读取 ${nextModels.length} 个模型。`
-              : '未读取到模型，可手动填写 Model ID。',
+              ? t("loadedCountModels", { count: nextModels.length })
+              : t("noModelsFoundYouCanEnterAModelID"),
           );
           setTempModelId((current) =>
             nextModels.length &&
@@ -394,7 +397,7 @@ export function SettingsDialog() {
 
           setAvailableModels([]);
           setModelFetchStatus(
-            error instanceof Error ? error.message : '模型列表读取失败。',
+            error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToLoadModelList"),
           );
         })
         .finally(() => {
@@ -408,7 +411,7 @@ export function SettingsDialog() {
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [hasLoadedSession, isAdmin, tempKeys.aiBaseUrl, tempKeys.aiGatewayApiKey]);
+  }, [hasLoadedSession, isAdmin, language, t, tempKeys.aiBaseUrl, tempKeys.aiGatewayApiKey]);
 
   if (!isAdmin) {
     return null;
@@ -470,7 +473,7 @@ export function SettingsDialog() {
               target="_blank"
             >
               <ExternalLinkIcon className="size-4" />
-              <span className="sr-only">获取 {label}</span>
+              <span className="sr-only">{t("getLabel", { label })}</span>
             </a>
           </Button>
           <Button
@@ -485,7 +488,7 @@ export function SettingsDialog() {
               <Eye className="size-4" />
             )}
             <span className="sr-only">
-              {showKey[service] ? '隐藏' : '显示'} {label}
+              {showKey[service] ? t("hide") : t("show")} {label}
             </span>
           </Button>
         </div>
@@ -496,16 +499,17 @@ export function SettingsDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <motion.div
-        className="fixed bottom-29 right-4 z-50"
+        className="fixed bottom-40 right-4 z-50"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
       >
         <DialogTrigger asChild>
           <Button
+            aria-label={t("settings")}
+            className="rounded-full backdrop-blur-sm shadow-lg hover:shadow-primary/20 hover:border-primary/40 hover:scale-105 transition-all duration-300 ease-in-out"
             size="icon"
             variant="outline"
-            className="rounded-full backdrop-blur-sm shadow-lg hover:shadow-primary/20 hover:border-primary/40 hover:scale-105 transition-all duration-300 ease-in-out"
           >
             <Settings className="size-[1.2rem]  text-primary" />
           </Button>
@@ -513,8 +517,8 @@ export function SettingsDialog() {
       </motion.div>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-xl">设置</DialogTitle>
-          <DialogDescription>配置 AI 接口密钥和偏好设置。</DialogDescription>
+          <DialogTitle className="text-xl">{t("settings")}</DialogTitle>
+          <DialogDescription>{t("configureAIAPIKeysAndPreferences")}</DialogDescription>
         </DialogHeader>
 
         <form className="space-y-10" onSubmit={handleSubmit}>
@@ -528,11 +532,11 @@ export function SettingsDialog() {
             </div>
 
             <div className="space-y-4">
-              {renderApiKeyInput('aiGatewayApiKey', 'AI API 密钥')}
+              {renderApiKeyInput('aiGatewayApiKey', t("aIAPIKey"))}
 
               {renderTextInput(
                 'aiBaseUrl',
-                'Base URL（接口地址）',
+                t("baseURLAPIEndpoint"),
                 'https://api.openai.com/v1',
               )}
 
@@ -541,7 +545,7 @@ export function SettingsDialog() {
                   className="text-muted-foreground text-sm"
                   htmlFor="select-model"
                 >
-                  模型
+                  {t("model")}
                 </label>
                 <Popover open={openModel} onOpenChange={setOpenModel}>
                   <PopoverTrigger id="select-model" asChild>
@@ -561,9 +565,9 @@ export function SettingsDialog() {
                     onWheel={(e) => e.stopPropagation()}
                   >
                     <Command>
-                      <CommandInput placeholder="搜索模型..." />
+                      <CommandInput placeholder={t("searchModels")} />
                       <CommandEmpty>
-                        {isLoadingModels ? '正在加载模型...' : '未找到模型。'}
+                        {isLoadingModels ? t("loadingModels") : t("noModelsFound")}
                       </CommandEmpty>
                       <CommandList>
                         <CommandGroup>
@@ -607,7 +611,7 @@ export function SettingsDialog() {
                   className="text-muted-foreground text-sm"
                   htmlFor="model-id"
                 >
-                  模型 ID
+                  {t("modelID")}
                 </label>
                 <Input
                   id="model-id"
@@ -619,12 +623,12 @@ export function SettingsDialog() {
             </div>
           </div>
           <Button size="lg" className="w-full" type="submit">
-            保存设置
+            {t("saveSettings")}
           </Button>
         </form>
 
         <p className="text-muted-foreground text-sm">
-          配置仅保存在当前浏览器标签页的会话中，关闭标签页后会自动清除。
+          {t("settingsSessionHint")}
         </p>
       </DialogContent>
     </Dialog>

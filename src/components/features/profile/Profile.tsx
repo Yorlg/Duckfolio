@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Circle } from 'lucide-react';
 import Image from 'next/image';
 import { ConfigIcon } from '@/lib/icon-registry';
+import { useTranslation } from 'react-i18next';
 import { Profile as ProfileType, SocialLink } from '@/types/platform-config';
 
 interface ProfileProps {
@@ -12,10 +13,14 @@ interface ProfileProps {
 }
 
 export function Profile({ profile, socialLinks }: ProfileProps) {
+  const { t } = useTranslation();
+  const greeting = t('profile.greeting');
+  const introduction = t('profile.introduction');
+
   return (
     <motion.div
       key="profile"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 1, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -24,7 +29,7 @@ export function Profile({ profile, socialLinks }: ProfileProps) {
       {/* Profile image */}
       <motion.div
         className="relative aspect-square w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto"
-        initial={{ scale: 0.9, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 1 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
       >
@@ -47,16 +52,16 @@ export function Profile({ profile, socialLinks }: ProfileProps) {
       <div className="space-y-12 text-center md:text-left">
         <motion.div
           className="space-y-4 md:space-y-6"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight flex flex-wrap items-center justify-center md:justify-start">
-            {[...'Hello, '.split(''), ...("I'm " + profile.name).split('')].map(
+            {[...greeting.split(''), ...introduction.split(''), ...profile.name.split('')].map(
               (char, index) => (
                 <motion.span
                   key={`title-${index}`}
-                  className={`inline-block ${index >= 7 ? 'text-(--theme-primary) dark:text-(--theme-secondary)' : ''}`}
+                  className={`inline-block ${index >= greeting.length ? 'text-(--theme-primary) dark:text-(--theme-secondary)' : ''}`}
                   animate={{
                     y: [0, -15, 0],
                   }}
@@ -81,7 +86,7 @@ export function Profile({ profile, socialLinks }: ProfileProps) {
         {/* Social links */}
         <motion.div
           className="flex flex-wrap gap-6 justify-center md:justify-start"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.5 }}
         >

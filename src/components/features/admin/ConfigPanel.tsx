@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useCallback, useState } from 'react';
+import { type ReactNode, useCallback, useRef, useState } from 'react';
 import {
   Check,
   ChevronDown,
@@ -10,7 +10,9 @@ import {
   Plus,
   Save,
   Search,
+  Upload,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -37,71 +39,37 @@ import type {
   WebsiteLink,
 } from '@/types/platform-config';
 import { Field, IconButton } from './AdminShared';
+import { readAdminResponse } from './admin-api';
+import { useTranslation } from 'react-i18next';
+import { adminMessageKeys } from '@/lib/admin/message-keys';
 import { createId } from './utils';
 
 type ConfigSectionKey = 'profile' | 'social' | 'website' | 'projects';
 
 const ICONS_PER_PAGE = 12;
 
-const TEXT = {
-  add: '\u6dfb\u52a0',
-  addGroup: '\u6dfb\u52a0\u5206\u7ec4',
-  addProject: '\u6dfb\u52a0\u9879\u76ee',
-  avatarPath: '\u5934\u50cf\u8def\u5f84',
-  bio: '\u7b80\u4ecb',
-  delete: '\u5220\u9664',
-  deleteGroup: '\u5220\u9664\u5206\u7ec4',
-  deleteProject: '\u5220\u9664\u9879\u76ee',
-  description: '\u63cf\u8ff0',
-  groupSuffix: '\u7ec4',
-  icon: '\u56fe\u6807',
-  iconNextPage: '\u4e0b\u4e00\u9875',
-  iconPage: '\u9875',
-  iconPreviousPage: '\u4e0a\u4e00\u9875',
-  iconSearch: '\u641c\u7d22\u56fe\u6807...',
-  iconUnknown: '\u5f53\u524d\u56fe\u6807',
-  itemSuffix: '\u9879',
-  name: '\u540d\u79f0',
-  noProjectGroups: '\u8fd8\u6ca1\u6709\u9879\u76ee\u5206\u7ec4\u3002',
-  noProjectsInGroup:
-    '\u8fd9\u4e2a\u5206\u7ec4\u8fd8\u6ca1\u6709\u9879\u76ee\u3002',
-  noSocial: '\u8fd8\u6ca1\u6709\u793e\u4ea4\u94fe\u63a5\u3002',
-  noWebsite: '\u8fd8\u6ca1\u6709\u7f51\u7ad9\u94fe\u63a5\u3002',
-  platform: '\u5e73\u53f0',
-  profileDesc:
-    '\u7ad9\u70b9\u540d\u79f0\u3001\u5934\u50cf\u548c\u7b80\u4ecb\u3002',
-  profileMeta: '\u57fa\u7840',
-  profileTitle: '\u57fa\u7840\u8d44\u6599',
-  projectsDesc:
-    'Projects \u9875\u9762\u5c55\u793a\u7684\u9879\u76ee\u5206\u7c7b\u548c\u9879\u76ee\u3002',
-  projectsTitle: '\u9879\u76ee\u5206\u7ec4',
-  save: '\u4fdd\u5b58\u914d\u7f6e',
-  sectionId: '\u5206\u7ec4 ID',
-  sectionTitle: '\u5206\u7ec4\u6807\u9898',
-  socialDesc:
-    '\u9996\u9875\u5c55\u793a\u7684\u793e\u4ea4\u5e73\u53f0\u5165\u53e3\u3002',
-  socialTitle: '\u793e\u4ea4\u94fe\u63a5',
-  title: '\u6807\u9898',
-  websiteDesc:
-    'Links \u9875\u9762\u5c55\u793a\u7684\u7f51\u7ad9\u5165\u53e3\u3002',
-  websiteTitle: '\u7f51\u7ad9\u94fe\u63a5',
-} as const;
-
 export function ConfigPanel({
+  adminToken,
   config,
   isSaving,
   onConfigChange,
   onSave,
 }: {
+  adminToken: string;
   config: ProfileConfig;
   isSaving: boolean;
   onConfigChange: (config: ProfileConfig) => void;
   onSave: () => void;
 }) {
+  const { t } = useTranslation('admin');
   const [openSections, setOpenSections] = useState<Set<ConfigSectionKey>>(
     () => new Set(),
   );
   const projectSections = config.projectSections || [];
+  const [uploadingImage, setUploadingImage] = useState<'avatar' | 'logo' | null>(null);
+  const [imageVersion, setImageVersion] = useState(0);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const isSectionOpen = useCallback(
     (section: ConfigSectionKey) => openSections.has(section),
@@ -136,6 +104,40 @@ export function ConfigPanel({
         ...profile,
       },
     });
+  };
+
+  const uploadSiteImage = async (kind: 'avatar' | 'logo', file: File) => {
+    if (!adminToken) return;
+
+    setUploadingImage(kind);
+    try {
+      const formData = new FormData();
+      formData.append('kind', kind);
+      formData.append('file', file);
+      const response = await fetch('/api/admin/site-image', {
+        body: formData,
+        headers: { 'x-admin-token': adminToken },
+        method: 'POST',
+      });
+      await readAdminResponse(response, t("failedToUploadSiteImage"));
+      if (kind === 'avatar') {
+        setProfile({ avatar: '/avatar.png' });
+      }
+      setImageVersion(Date.now());
+      toast.success(
+        kind === 'avatar'
+          ? t("avatarSavedHint")
+          : t("logoReplaced"),
+      );
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToUploadSiteImage"),
+      );
+    } finally {
+      setUploadingImage(null);
+      const input = kind === 'avatar' ? avatarInputRef.current : logoInputRef.current;
+      if (input) input.value = '';
+    }
   };
 
   const updateSocialLink = (index: number, patch: Partial<SocialLink>) => {
@@ -193,28 +195,28 @@ export function ConfigPanel({
   return (
     <section className="grid gap-4">
       <ConfigAccordionSection
-        description={TEXT.profileDesc}
+        description={t('siteNameAvatarAndBio')}
         isOpen={isSectionOpen('profile')}
-        meta={TEXT.profileMeta}
-        title={TEXT.profileTitle}
+        meta={t('basic')}
+        title={t('basicInformation')}
         onToggle={() => toggleConfigSection('profile')}
       >
         <div className="grid gap-4 md:grid-cols-3">
-          <Field label={TEXT.name}>
+          <Field label={t('name')}>
             <input
               className="admin-input"
               value={config.profile.name}
               onChange={(event) => setProfile({ name: event.target.value })}
             />
           </Field>
-          <Field label={TEXT.avatarPath}>
+          <Field label={t('avatarPath')}>
             <input
               className="admin-input"
               value={config.profile.avatar}
               onChange={(event) => setProfile({ avatar: event.target.value })}
             />
           </Field>
-          <Field label={TEXT.bio}>
+          <Field label={t('bio')}>
             <input
               className="admin-input"
               value={config.profile.bio}
@@ -222,14 +224,52 @@ export function ConfigPanel({
             />
           </Field>
         </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {(['avatar', 'logo'] as const).map((kind) => (
+            <Field
+              key={kind}
+              label={kind === 'avatar' ? t("uploadAvatarPNG") : t("uploadLogoPNG")}
+            >
+              <div className="flex items-center gap-3">
+                <img
+                  alt={kind === 'avatar' ? t("currentAvatar") : t("currentLogo")}
+                  className="size-12 rounded-md object-contain"
+                  src={'/' + kind + '.png?v=' + imageVersion}
+                />
+                <Button
+                  disabled={uploadingImage !== null}
+                  type="button"
+                  variant="outline"
+                  onClick={() => (kind === 'avatar' ? avatarInputRef : logoInputRef).current?.click()}
+                >
+                  {uploadingImage === kind ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                  {kind === 'avatar' ? t("replaceAvatar") : t("replaceLogo")}
+                </Button>
+                <input
+                  ref={kind === 'avatar' ? avatarInputRef : logoInputRef}
+                  accept="image/png"
+                  className="hidden"
+                  type="file"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) void uploadSiteImage(kind, file);
+                  }}
+                />
+              </div>
+            </Field>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          {t("siteImageDeploymentHint")}
+        </p>
       </ConfigAccordionSection>
 
       <ConfigAccordionSection
-        actionLabel={TEXT.add}
-        description={TEXT.socialDesc}
+        actionLabel={t('add')}
+        description={t('socialLinksDescription')}
         isOpen={isSectionOpen('social')}
-        meta={`${config.socialLinks.length} ${TEXT.itemSuffix}`}
-        title={TEXT.socialTitle}
+        meta={`${config.socialLinks.length} ${t('items')}`}
+        title={t('socialLinks')}
         onAction={() => {
           onConfigChange({
             ...config,
@@ -260,7 +300,7 @@ export function ConfigPanel({
                   />
                   <input
                     className="admin-input"
-                    placeholder={TEXT.platform}
+                    placeholder={t('platform')}
                     value={link.platform}
                     onChange={(event) =>
                       updateSocialLink(index, { platform: event.target.value })
@@ -279,7 +319,7 @@ export function ConfigPanel({
                     onChange={(icon) => updateSocialLink(index, { icon })}
                   />
                   <IconButton
-                    label={TEXT.delete}
+                    label={t('delete')}
                     onClick={() =>
                       onConfigChange({
                         ...config,
@@ -294,16 +334,16 @@ export function ConfigPanel({
             ))}
           </div>
         ) : (
-          <EmptyConfigText>{TEXT.noSocial}</EmptyConfigText>
+          <EmptyConfigText>{t('noSocialLinksYet')}</EmptyConfigText>
         )}
       </ConfigAccordionSection>
 
       <ConfigAccordionSection
-        actionLabel={TEXT.add}
-        description={TEXT.websiteDesc}
+        actionLabel={t('add')}
+        description={t('websiteLinksDisplayedOnTheLinksPage')}
         isOpen={isSectionOpen('website')}
-        meta={`${config.websiteLinks.length} ${TEXT.itemSuffix}`}
-        title={TEXT.websiteTitle}
+        meta={`${config.websiteLinks.length} ${t('items')}`}
+        title={t('websiteLinks')}
         onAction={() => {
           onConfigChange({
             ...config,
@@ -338,7 +378,7 @@ export function ConfigPanel({
                 />
                 <input
                   className="admin-input"
-                  placeholder={TEXT.title}
+                  placeholder={t('title')}
                   value={link.title}
                   onChange={(event) =>
                     updateWebsiteLink(index, { title: event.target.value })
@@ -354,7 +394,7 @@ export function ConfigPanel({
                 />
                 <input
                   className="admin-input"
-                  placeholder={TEXT.description}
+                  placeholder={t('description')}
                   value={link.description || ''}
                   onChange={(event) =>
                     updateWebsiteLink(index, {
@@ -363,7 +403,7 @@ export function ConfigPanel({
                   }
                 />
                 <IconButton
-                  label={TEXT.delete}
+                  label={'delete'}
                   onClick={() =>
                     onConfigChange({
                       ...config,
@@ -377,16 +417,16 @@ export function ConfigPanel({
             ))}
           </div>
         ) : (
-          <EmptyConfigText>{TEXT.noWebsite}</EmptyConfigText>
+          <EmptyConfigText>{t('noWebsiteLinksYet')}</EmptyConfigText>
         )}
       </ConfigAccordionSection>
 
       <ConfigAccordionSection
-        actionLabel={TEXT.addGroup}
-        description={TEXT.projectsDesc}
+        actionLabel={t('addGroup')}
+        description={t('projectsDescription')}
         isOpen={isSectionOpen('projects')}
-        meta={`${projectSections.length} ${TEXT.groupSuffix}`}
-        title={TEXT.projectsTitle}
+        meta={`${projectSections.length} ${t('groups')}`}
+        title={t('projectGroups')}
         onAction={() => {
           onConfigChange({
             ...config,
@@ -410,7 +450,7 @@ export function ConfigPanel({
                 <div className="grid gap-3 border-b border-[#121212]/10 pb-3 dark:border-white/10 md:grid-cols-[1fr_2fr_auto_auto]">
                   <input
                     className="admin-input"
-                    placeholder={TEXT.sectionId}
+                    placeholder={t('groupID')}
                     value={section.id}
                     onChange={(event) =>
                       updateProjectSection(sectionIndex, {
@@ -420,7 +460,7 @@ export function ConfigPanel({
                   />
                   <input
                     className="admin-input"
-                    placeholder={TEXT.sectionTitle}
+                    placeholder={t('groupTitle')}
                     value={section.title}
                     onChange={(event) =>
                       updateProjectSection(sectionIndex, {
@@ -448,10 +488,10 @@ export function ConfigPanel({
                     }
                   >
                     <Plus className="size-4" />
-                    {TEXT.addProject}
+                    {t('addProject')}
                   </Button>
                   <IconButton
-                    label={TEXT.deleteGroup}
+                    label={t('deleteGroup')}
                     onClick={() =>
                       onConfigChange({
                         ...config,
@@ -482,7 +522,7 @@ export function ConfigPanel({
                         />
                         <input
                           className="admin-input"
-                          placeholder={TEXT.title}
+                          placeholder={'title'}
                           value={project.title}
                           onChange={(event) =>
                             updateProject(sectionIndex, projectIndex, {
@@ -502,7 +542,7 @@ export function ConfigPanel({
                         />
                         <input
                           className="admin-input"
-                          placeholder={TEXT.description}
+                          placeholder={'description'}
                           value={project.description || ''}
                           onChange={(event) =>
                             updateProject(sectionIndex, projectIndex, {
@@ -517,7 +557,7 @@ export function ConfigPanel({
                           }
                         />
                         <IconButton
-                          label={TEXT.deleteProject}
+                          label={t('deleteProject')}
                           onClick={() =>
                             updateProjectSection(sectionIndex, {
                               projects: section.projects.filter(
@@ -531,13 +571,13 @@ export function ConfigPanel({
                     ))}
                   </div>
                 ) : (
-                  <EmptyConfigText>{TEXT.noProjectsInGroup}</EmptyConfigText>
+                  <EmptyConfigText>{t('thisGroupHasNoProjectsYet')}</EmptyConfigText>
                 )}
               </div>
             ))}
           </div>
         ) : (
-          <EmptyConfigText>{TEXT.noProjectGroups}</EmptyConfigText>
+          <EmptyConfigText>{t('noProjectGroupsYet')}</EmptyConfigText>
         )}
       </ConfigAccordionSection>
 
@@ -553,7 +593,7 @@ export function ConfigPanel({
           ) : (
             <Save size={18} />
           )}
-          {TEXT.save}
+          {t('saveConfiguration')}
         </Button>
       </div>
     </section>
@@ -579,6 +619,7 @@ function ConfigAccordionSection({
   onAction?: () => void;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation('admin');
   return (
     <section className="overflow-hidden rounded-lg border border-[#121212]/10 bg-white/40 dark:border-white/10 dark:bg-white/[0.02]">
       <div className="flex items-center gap-3 px-4 py-3">
@@ -614,7 +655,7 @@ function ConfigAccordionSection({
             onClick={onAction}
           >
             <Plus className="size-4" />
-            {actionLabel || TEXT.add}
+            {actionLabel || t('add')}
           </Button>
         )}
       </div>
@@ -635,6 +676,7 @@ function IconPicker({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const { t } = useTranslation('admin');
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
@@ -647,7 +689,7 @@ function IconPicker({
       ? [
           {
             keywords: [normalizedValue],
-            label: TEXT.iconUnknown,
+            label: t('currentIcon'),
             value: normalizedValue,
           },
         ]
@@ -688,7 +730,7 @@ function IconPicker({
           <span className="flex min-w-0 items-center gap-2">
             <ConfigIcon className="size-4 shrink-0" icon={normalizedValue} />
             <span className="truncate">
-              {selectedOption?.label || TEXT.icon}
+              {selectedOption?.label || t('icon')}
             </span>
           </span>
           <ChevronDown className="size-4 shrink-0 opacity-60" />
@@ -700,7 +742,7 @@ function IconPicker({
       >
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder={TEXT.iconSearch}
+            placeholder={t('searchIcons')}
             value={search}
             onValueChange={(nextSearch) => {
               setSearch(nextSearch);
@@ -744,7 +786,7 @@ function IconPicker({
               <CommandEmpty>
                 <div className="grid gap-2 px-4 py-2 text-center text-sm text-[#121212]/50 dark:text-white/50">
                   <Search className="mx-auto size-4" />
-                  <span>没有找到匹配的图标</span>
+                  <span>{t("noMatchingIconsFound")}</span>
                 </div>
               </CommandEmpty>
             )}
@@ -762,10 +804,10 @@ function IconPicker({
                 }
               >
                 <ChevronLeft className="size-3.5" />
-                {TEXT.iconPreviousPage}
+                {t('previousPage')}
               </Button>
               <span>
-                {safePage + 1} / {totalPages} {TEXT.iconPage}
+                {safePage + 1} / {totalPages} {t('page')}
               </span>
               <Button
                 className="h-7 gap-1 px-2"
@@ -779,7 +821,7 @@ function IconPicker({
                   )
                 }
               >
-                {TEXT.iconNextPage}
+                {t('nextPage')}
                 <ChevronRight className="size-3.5" />
               </Button>
             </div>

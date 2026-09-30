@@ -55,11 +55,14 @@ import {
   parseDateTime,
   toDatetimeLocal,
 } from './utils';
+import { useTranslation } from 'react-i18next';
+import { adminMessageKeys } from '@/lib/admin/message-keys';
 
 const PUBLISH_LIST_REFRESH_DELAY_MS = 1600;
 type MessageType = 'success' | 'error' | 'warning' | 'info';
 
 export function AdminPanel() {
+  const { t } = useTranslation('admin');
   const [tab, setTab] = useState<Tab>('home');
   const [adminToken, setAdminToken] = useState('');
   const [unlocked, setUnlocked] = useState(false);
@@ -112,16 +115,16 @@ export function AdminPanel() {
 
   const handleLogin = useCallback(async () => {
     if (!loginInput.trim()) {
-      notify('请输入管理员口令。', 'warning');
+      notify(t("enterAdminPassword"), 'warning');
       return;
     }
 
     const ok = await verifyToken(loginInput.trim());
 
     if (!ok) {
-      notify('管理员口令不正确。', 'error');
+      notify(t("incorrectAdminPassword"), 'error');
     }
-  }, [loginInput, notify, verifyToken]);
+  }, [loginInput, notify, t, verifyToken]);
 
   const handleLogout = useCallback(() => {
     window.localStorage.removeItem('duckfolio-admin-token');
@@ -143,7 +146,7 @@ export function AdminPanel() {
 
     fetch('/api/admin/status')
       .then((response) =>
-        readAdminResponse<ApiStatusResponse>(response, '后台状态读取失败。'),
+        readAdminResponse<ApiStatusResponse>(response, t("failedToLoadAdminStatus")),
       )
       .then((data) => {
         setStatus(data.status);
@@ -151,41 +154,41 @@ export function AdminPanel() {
       })
       .catch((error) => {
         notify(
-          error instanceof Error ? error.message : '后台状态读取失败。',
+          error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToLoadAdminStatus"),
           'error',
         );
       });
-  }, [notify, verifyToken]);
+  }, [notify, t, verifyToken]);
 
   const targetText = useMemo(() => {
     if (!status) {
-      return '正在读取发布目标';
+      return t("loadingPublishingTarget");
     }
 
     if (status.mode === 'github') {
       return `${status.repo} / ${status.branch}`;
     }
 
-    return '本地配置编辑模式';
-  }, [status]);
+    return t("localConfigurationEditingMode");
+  }, [status, t]);
 
   const notices = useMemo<ReactNode[]>(() => {
     const nextNotices: ReactNode[] = [];
 
     if (!status?.hasAdminPassword) {
       nextNotices.push(
-        '未检测到 ADMIN_PASSWORD，写入接口会拒绝请求。请在部署平台的环境变量里配置，不要写入仓库。',
+        t("missingAdminPasswordNotice"),
       );
     }
 
     if (!status?.hasGitHubConfig) {
       nextNotices.push(
-        '未检测到 GitHub 写入配置，文章发布不会在本地 main 工作区创建 posts 目录。GITHUB_BRANCH 未配置时默认使用 deploy。',
+        t("missingGitHubConfigNotice"),
       );
     }
 
     return nextNotices;
-  }, [status?.hasAdminPassword, status?.hasGitHubConfig]);
+  }, [status?.hasAdminPassword, status?.hasGitHubConfig, t]);
 
   const updatePost = (patch: Partial<typeof post>) => {
     setPost((current) => ({
@@ -229,7 +232,7 @@ export function AdminPanel() {
         });
         const data = await readAdminResponse<ApiPostsResponse>(
           response,
-          '文章列表读取失败。',
+          t("failedToLoadThePostList"),
         );
 
         const nextPosts = data.posts || [];
@@ -253,7 +256,7 @@ export function AdminPanel() {
       } catch (error) {
         if (!options?.silentError) {
           notify(
-            error instanceof Error ? error.message : '文章列表读取失败。',
+            error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToLoadThePostList"),
             'error',
           );
         }
@@ -261,12 +264,12 @@ export function AdminPanel() {
         setIsLoadingPosts(false);
       }
     },
-    [adminToken, notify],
+    [adminToken, notify, t],
   );
 
   const editPost = async (slug: string) => {
     if (!adminToken) {
-      notify('请先输入管理员口令。', 'warning');
+      notify(t("adminPasswordRequired"), 'warning');
       return;
     }
 
@@ -283,7 +286,7 @@ export function AdminPanel() {
       );
       const data = await readAdminResponse<ApiPostResponse>(
         response,
-        '文章读取失败。',
+        t("failedToLoadThePost"),
       );
 
       const detail = data.post;
@@ -303,7 +306,7 @@ export function AdminPanel() {
       setTab('post');
     } catch (error) {
       notify(
-        error instanceof Error ? error.message : '文章读取失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToLoadThePost"),
         'error',
       );
     } finally {
@@ -313,7 +316,7 @@ export function AdminPanel() {
 
   const togglePostVisibility = async (targetPost: AdminPostSummary) => {
     if (!adminToken) {
-      notify('请先输入管理员口令。', 'warning');
+      notify(t("adminPasswordRequired"), 'warning');
       return;
     }
 
@@ -335,7 +338,7 @@ export function AdminPanel() {
       });
       const data = await readAdminResponse<{ message?: string }>(
         response,
-        '文章状态更新失败。',
+        t("failedToUpdatePostStatus"),
       );
 
       setPosts((current) =>
@@ -348,10 +351,10 @@ export function AdminPanel() {
         updatePost({ draft: nextDraft });
       }
 
-      notify(data.message || '文章状态已更新。', 'success');
+      notify(data.message ? t(adminMessageKeys[data.message] ?? data.message) : t('postStatusUpdated'), 'success');
     } catch (error) {
       notify(
-        error instanceof Error ? error.message : '文章状态更新失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToUpdatePostStatus"),
         'error',
       );
     } finally {
@@ -361,12 +364,14 @@ export function AdminPanel() {
 
   const deletePost = async (slug: string) => {
     if (!adminToken) {
-      notify('请先输入管理员口令。', 'warning');
+      notify(t("adminPasswordRequired"), 'warning');
       return;
     }
 
     if (
-      !window.confirm(`确认删除 posts/${slug}.md？此操作会提交到目标分支。`)
+      !window.confirm(
+        t("confirmDeletePost", { slug }),
+      )
     ) {
       return;
     }
@@ -385,7 +390,7 @@ export function AdminPanel() {
       );
       const data = await readAdminResponse<{ message?: string }>(
         response,
-        '文章删除失败。',
+        t("failedToDeleteThePost"),
       );
 
       setPosts((current) => current.filter((item) => item.slug !== slug));
@@ -397,10 +402,10 @@ export function AdminPanel() {
         clearPostForm();
       }
 
-      notify(data.message || '文章已删除。', 'success');
+      notify(data.message ? t(adminMessageKeys[data.message] ?? data.message) : t('postDeleted'), 'success');
     } catch (error) {
       notify(
-        error instanceof Error ? error.message : '文章删除失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToDeleteThePost"),
         'error',
       );
     } finally {
@@ -458,16 +463,27 @@ export function AdminPanel() {
           repo?: string;
         };
         slug?: string;
-      }>(response, '文章发布失败。');
+        cleanupError?: string;
+      }>(response, t("failedToPublishThePost"));
 
       const targetMessage = data.result
         ? data.result.mode === 'github'
-          ? `已推送到 ${data.result.repo}/${data.result.path}`
-          : `已写入 ${data.result.path}`
-        : '文章已保存。';
+          ? t("pushedToRepoPath", {
+              path: data.result.path ?? '',
+              repo: data.result.repo ?? '',
+            })
+          : t("writtenToPath", { path: data.result.path ?? '' })
+        : t("postSaved");
 
-      const successMessage = data.message
-        ? `${data.message} ${targetMessage}`
+      const publishedMessage = data.cleanupError
+        ? t('postSavedOldPathCleanupFailed', {
+            reason: t(adminMessageKeys[data.cleanupError] ?? data.cleanupError),
+          })
+        : data.message
+          ? t(adminMessageKeys[data.message] ?? data.message)
+          : '';
+      const successMessage = publishedMessage
+        ? publishedMessage + ' ' + targetMessage
         : targetMessage;
       const publishedSlug = data.slug || post.slug;
       const publishedPost: AdminPostSummary = {
@@ -494,7 +510,7 @@ export function AdminPanel() {
       }, PUBLISH_LIST_REFRESH_DELAY_MS);
     } catch (error) {
       notify(
-        error instanceof Error ? error.message : '文章发布失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToPublishThePost"),
         'error',
       );
     } finally {
@@ -520,19 +536,22 @@ export function AdminPanel() {
           path?: string;
           repo?: string;
         };
-      }>(response, '配置保存失败。');
+      }>(response, t("failedToSaveConfiguration"));
 
       notify(
         data.result
           ? data.result.mode === 'github'
-            ? `配置已推送到 ${data.result.repo}/${data.result.path}`
-            : `配置已写入 ${data.result.path}`
-          : '配置已保存。',
+            ? t("configurationPushedToRepoPath", {
+                path: data.result.path ?? '',
+                repo: data.result.repo ?? '',
+              })
+            : t("configurationWrittenToPath", { path: data.result.path ?? '' })
+          : t("configurationSaved"),
         'success',
       );
     } catch (error) {
       notify(
-        error instanceof Error ? error.message : '配置保存失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToSaveConfiguration"),
         'error',
       );
     } finally {
@@ -556,12 +575,12 @@ export function AdminPanel() {
               <p className="text-sm uppercase tracking-wider text-[#121212]/40 dark:text-white/40">
                 Duckfolio Admin
               </p>
-              <h1 className="mt-2 text-2xl font-semibold">管理员验证</h1>
+              <h1 className="mt-2 text-2xl font-semibold">{t("administratorVerification")}</h1>
             </div>
             <div className="flex w-full flex-col gap-3">
               <input
                 className="w-full rounded-lg border border-[#121212]/10 bg-transparent px-4 py-3 text-sm outline-none transition-colors focus:border-[#121212]/30 placeholder:text-[#121212]/30 dark:border-white/10 dark:focus:border-white/30 dark:placeholder:text-white/30"
-                placeholder="请输入管理员口令"
+                placeholder={t("enterAdministratorPassphrase")}
                 type="password"
                 value={loginInput}
                 onChange={(event) => setLoginInput(event.target.value)}
@@ -578,11 +597,11 @@ export function AdminPanel() {
                 onClick={handleLogin}
               >
                 {isVerifying ? (
-                  '验证中…'
+                  t("verifying")
                 ) : (
                   <span className="inline-flex items-center gap-2">
                     <LogIn size={16} />
-                    进入管理后台
+                    {t("enterAdminPanel")}
                   </span>
                 )}
               </Button>
@@ -593,7 +612,7 @@ export function AdminPanel() {
               >
                 <Link href="/">
                   <Home size={16} />
-                  返回首页
+                  {t("backToHome")}
                 </Link>
               </Button>
             </div>
@@ -612,7 +631,7 @@ export function AdminPanel() {
             <p className="text-sm uppercase tracking-wider text-[#121212]/40 dark:text-white/40">
               Duckfolio Admin
             </p>
-            <h1 className="mt-2 text-3xl font-semibold">内容管理</h1>
+            <h1 className="mt-2 text-3xl font-semibold">{t("contentManagement")}</h1>
           </div>
 
           <div className="flex items-center gap-3">
@@ -626,7 +645,7 @@ export function AdminPanel() {
                   className="inline-flex items-center gap-2 rounded border border-[#121212]/10 px-3 py-2 text-sm text-[#121212]/60 hover:text-[#121212] dark:border-white/10 dark:text-white/60 dark:hover:text-white"
                   variant="ghost"
                 >
-                  操作
+                  {t("actions")}
                   <ChevronDown size={14} />
                 </Button>
               </DropdownMenuTrigger>
@@ -634,12 +653,12 @@ export function AdminPanel() {
                 <DropdownMenuItem asChild>
                   <Link href="/">
                     <Home size={16} />
-                    返回首页
+                    {t("backToHome")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut size={16} />
-                  退出登录
+                  {t("logOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -653,25 +672,25 @@ export function AdminPanel() {
             <NavButton
               active={tab === 'home'}
               icon={<BarChart3 size={18} />}
-              label="首页"
+              label={t("dashboard")}
               onClick={() => setTab('home')}
             />
             <NavButton
               active={tab === 'posts'}
               icon={<List size={18} />}
-              label="文章列表"
+              label={t("postList")}
               onClick={() => setTab('posts')}
             />
             <NavButton
               active={tab === 'media'}
               icon={<ImageIcon size={18} />}
-              label="媒体资源"
+              label={t("mediaLibrary")}
               onClick={() => setTab('media')}
             />
             <NavButton
               active={tab === 'config'}
               icon={<Settings2 size={18} />}
-              label="站点配置"
+              label={t("siteConfiguration")}
               onClick={() => setTab('config')}
             />
           </aside>
@@ -705,6 +724,7 @@ export function AdminPanel() {
             <MediaPanel adminToken={adminToken} />
           ) : (
             <ConfigPanel
+              adminToken={adminToken}
               config={config}
               isSaving={isSavingConfig}
               onConfigChange={setConfig}

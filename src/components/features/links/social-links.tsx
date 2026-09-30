@@ -1,7 +1,7 @@
 'use client';
 
 import { useProfileStore } from '@/lib/store';
-import { Button } from '@/packages/ui/button';
+import { Button } from '@/components/ui/button';
 
 export function SocialLinks() {
   const { socialLinks } = useProfileStore();

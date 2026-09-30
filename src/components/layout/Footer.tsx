@@ -1,19 +1,23 @@
-import { motion } from "framer-motion"
+'use client';
+
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface FooterProps {
-    name: string
+  name: string;
 }
 
 export function Footer({ name }: FooterProps) {
+  const { t } = useTranslation();
   return (
     <motion.footer
-      initial={{ opacity: 0 }}
+      initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.8 }}
       className="relative z-10 py-6 mt-auto text-center text-[#121212]/60 dark:text-white/60 text-sm"
     >
       <p className="mb-2">
-        © {new Date().getFullYear()} {name}. All rights reserved.
+        © {new Date().getFullYear()} {name}. {t('footer.copyright')}
       </p>
       <div className="flex justify-center space-x-4">
         <a
