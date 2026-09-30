@@ -5,6 +5,7 @@ import * as echarts from 'echarts';
 import type { EChartsOption } from 'echarts';
 import { BarChart3, Loader2 } from 'lucide-react';
 import type { AdminPostSummary } from './types';
+import { useTranslation } from 'react-i18next';
 import { getMonthlyPostCounts } from './utils';
 
 export function DashboardPanel({
@@ -14,42 +15,44 @@ export function DashboardPanel({
   isLoading: boolean;
   posts: AdminPostSummary[];
 }) {
+  const { t, i18n } = useTranslation('admin');
+  const language: 'en' | 'zh-CN' = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-CN';
   const totalPosts = posts.length;
   const draftPosts = posts.filter((post) => post.draft).length;
   const publicPosts = totalPosts - draftPosts;
-  const monthlyPosts = getMonthlyPostCounts(posts);
-  const monthlyChartOption = createMonthlyChartOption(monthlyPosts);
-  const statusChartOption = createStatusChartOption(publicPosts, draftPosts);
+  const monthlyPosts = getMonthlyPostCounts(posts, language);
+  const monthlyChartOption = createMonthlyChartOption(monthlyPosts, t);
+  const statusChartOption = createStatusChartOption(publicPosts, draftPosts, t);
 
   return (
     <section className="grid gap-5">
       <div className="flex flex-col gap-1 border-b border-[#121212]/10 pb-4 dark:border-white/10">
-        <h2 className="text-xl font-medium">首页</h2>
+        <h2 className="text-xl font-medium">{t("dashboard")}</h2>
         <p className="text-sm text-[#121212]/50 dark:text-white/50">
-          内容概览和发布状态。
+          {t("contentOverviewAndPublishingStatus")}
         </p>
       </div>
 
       {isLoading ? (
         <div className="flex items-center gap-2 rounded-lg border border-[#121212]/10 px-4 py-6 text-sm text-[#121212]/60 dark:border-white/10 dark:text-white/60">
           <Loader2 className="size-4 animate-spin" />
-          正在读取概览数据...
+          {t("loadingOverviewData")}
         </div>
       ) : (
         <>
           <div className="grid gap-4 md:grid-cols-3">
-            <DashboardMetricCard label="文章总数" value={totalPosts} />
-            <DashboardMetricCard label="公开文章" value={publicPosts} />
-            <DashboardMetricCard label="草稿文章" value={draftPosts} />
+            <DashboardMetricCard label={t("totalPosts")} value={totalPosts} />
+            <DashboardMetricCard label={t("publicPosts")} value={publicPosts} />
+            <DashboardMetricCard label={t("draftPosts")} value={draftPosts} />
           </div>
 
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
             <div className="rounded-lg border border-[#121212]/10 p-5 dark:border-white/10">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h3 className="font-medium">发布趋势</h3>
+                  <h3 className="font-medium">{t("publishingTrend")}</h3>
                   <p className="mt-1 text-sm text-[#121212]/50 dark:text-white/50">
-                    最近 6 个月文章数量。
+                    {t("postCountOverTheLastSixMonths")}
                   </p>
                 </div>
                 <BarChart3 className="size-5 text-[#121212]/40 dark:text-white/40" />
@@ -58,19 +61,19 @@ export function DashboardPanel({
             </div>
 
             <div className="rounded-lg border border-[#121212]/10 p-5 dark:border-white/10">
-              <h3 className="font-medium">文章状态</h3>
+              <h3 className="font-medium">{t("postStatus")}</h3>
               <p className="mt-1 text-sm text-[#121212]/50 dark:text-white/50">
-                公开与草稿比例。
+                {t("publicToDraftRatio")}
               </p>
               <EChart className="mt-4 h-48" option={statusChartOption} />
               <div className="mt-5 grid gap-2 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#121212]/60 dark:text-white/60">公开</span>
-                  <span>{publicPosts} 篇</span>
+                  <span className="text-[#121212]/60 dark:text-white/60">{t("public")}</span>
+                  <span>{t("countPosts", { count: publicPosts })}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#121212]/60 dark:text-white/60">草稿</span>
-                  <span>{draftPosts} 篇</span>
+                  <span className="text-[#121212]/60 dark:text-white/60">{t("draft")}</span>
+                  <span>{t("countPosts", { count: draftPosts })}</span>
                 </div>
               </div>
             </div>
@@ -126,7 +129,8 @@ function EChart({
 }
 
 function createMonthlyChartOption(
-  monthlyPosts: ReturnType<typeof getMonthlyPostCounts>,
+  monthlyPosts: Array<{ count: number; label: string }>,
+  t: (source: string, params?: Record<string, string | number>) => string,
 ): EChartsOption {
   return {
     animationDuration: 700,
@@ -139,7 +143,7 @@ function createMonthlyChartOption(
     },
     tooltip: {
       borderWidth: 0,
-      formatter: '{b}: {c} 篇',
+      formatter: t("nameCountPosts", { name: '{b}', count: '{c}' }),
       trigger: 'axis',
     },
     xAxis: {
@@ -170,6 +174,7 @@ function createMonthlyChartOption(
 function createStatusChartOption(
   publicPosts: number,
   draftPosts: number,
+  t: (source: string, params?: Record<string, string | number>) => string,
 ): EChartsOption {
   const total = publicPosts + draftPosts;
 
@@ -181,7 +186,7 @@ function createStatusChartOption(
     },
     series: [
       {
-        name: '文章状态',
+        name: t("postStatus"),
         type: 'pie',
         radius: ['30%', '50%'],
         avoidLabelOverlap: false,
@@ -206,14 +211,20 @@ function createStatusChartOption(
         },
         data: total
           ? [
-              { name: '公开', value: publicPosts },
-              { name: '草稿', value: draftPosts },
+              { name: t("public"), value: publicPosts },
+              { name: t("draft"), value: draftPosts },
             ]
-          : [{ name: '暂无文章', value: 1 }],
+          : [{ name: t("noPosts"), value: 1 }],
       },
     ],
     tooltip: {
-      formatter: total ? '{b}: {c} 篇 ({d}%)' : '暂无文章',
+      formatter: total
+        ? t("nameCountPostsPercentage", {
+            count: '{c}',
+            name: '{b}',
+            percentage: '{d}',
+          })
+        : t("noPosts"),
       trigger: 'item',
     },
   };

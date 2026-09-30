@@ -15,12 +15,15 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import type { MediaFileSummary } from '@/lib/admin/content';
 import { readAdminResponse } from './admin-api';
+import { useTranslation } from 'react-i18next';
+import { adminMessageKeys } from '@/lib/admin/message-keys';
 
 interface MediaPanelProps {
   adminToken: string;
 }
 
 export function MediaPanel({ adminToken }: MediaPanelProps) {
+  const { t } = useTranslation('admin');
   const [files, setFiles] = useState<MediaFileSummary[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -38,18 +41,18 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
       });
       const data = await readAdminResponse<{ files: MediaFileSummary[] }>(
         response,
-        '媒体列表读取失败。',
+        t("failedToLoadMediaList"),
       );
 
       setFiles(data.files || []);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : '媒体列表读取失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToLoadMediaList"),
       );
     } finally {
       setIsLoading(false);
     }
-  }, [adminToken]);
+  }, [adminToken, t]);
 
   useEffect(() => {
     void loadFiles();
@@ -75,14 +78,14 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
           const data = (await response.json().catch(() => ({}))) as {
             message?: string;
           };
-          throw new Error(data.message || `${file.name} 上传失败。`);
+          throw new Error(data.message ? t(adminMessageKeys[data.message] ?? data.message) : t('failedToUploadName', { name: file.name }));
         }
       }
 
-      toast.success('文件上传成功。');
+      toast.success(t("filesUploadedSuccessfully"));
       void loadFiles();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : '文件上传失败。');
+      toast.error(error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToUploadFiles"));
     } finally {
       setIsUploading(false);
 
@@ -95,7 +98,7 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
   const handleDelete = async (mediaPath: string) => {
     if (!adminToken) return;
 
-    if (!window.confirm(`确认删除 ${mediaPath}？此操作会提交到目标分支。`)) {
+    if (!window.confirm(t("confirmDeleteMedia", { path: mediaPath }))) {
       return;
     }
 
@@ -111,14 +114,14 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
       );
       const data = await readAdminResponse<{ message?: string }>(
         response,
-        '媒体文件删除失败。',
+        t("failedToDeleteMediaFile"),
       );
 
       setFiles((current) => current.filter((file) => file.path !== mediaPath));
-      toast.success(data.message || '媒体文件已删除。');
+      toast.success(data.message ? t(adminMessageKeys[data.message] ?? data.message) : t('mediaFileDeleted'));
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : '媒体文件删除失败。',
+        error instanceof Error ? t(adminMessageKeys[error.message] ?? error.message) : t("failedToDeleteMediaFile"),
       );
     } finally {
       setDeletingPath(null);
@@ -127,13 +130,13 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
 
   const copyUrl = (url: string) => {
     void navigator.clipboard.writeText(url);
-    toast.success('已复制链接。');
+    toast.success(t("linkCopied"));
   };
 
   return (
     <section className="grid gap-5">
       <div className="flex items-center justify-between border-b border-[#121212]/10 pb-3 dark:border-white/10">
-        <h2 className="text-lg font-medium">媒体资源</h2>
+        <h2 className="text-lg font-medium">{t("mediaLibrary")}</h2>
         <div className="flex items-center gap-2">
           <Button
             className="gap-2"
@@ -143,7 +146,7 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
             onClick={loadFiles}
           >
             <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
-            刷新
+            {t("refresh")}
           </Button>
           <Button
             className="gap-2"
@@ -157,7 +160,7 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
             ) : (
               <Upload size={16} />
             )}
-            上传文件
+            {t("uploadFiles")}
           </Button>
           <input
             ref={fileInputRef}
@@ -176,11 +179,11 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
       {isLoading && files.length === 0 ? (
         <div className="flex items-center justify-center py-16 text-sm text-[#121212]/40 dark:text-white/40">
           <Loader2 size={20} className="mr-2 animate-spin" />
-          加载中...
+          {t("loading")}
         </div>
       ) : files.length === 0 ? (
         <div className="py-16 text-center text-sm text-[#121212]/40 dark:text-white/40">
-          暂无媒体文件。
+          {t("noMediaFiles")}
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -214,10 +217,10 @@ export function MediaPanel({ adminToken }: MediaPanelProps) {
                     variant="outline"
                     onClick={() => copyUrl(file.url)}
                   >
-                    复制链接
+                    {t("copyLink")}
                   </Button>
                   <Button
-                    aria-label="删除"
+                    aria-label={t("delete")}
                     className="h-7 w-7 text-[#121212]/50 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-600 dark:text-white/50 dark:hover:text-red-300"
                     disabled={deletingPath === file.path}
                     size="icon"

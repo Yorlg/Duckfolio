@@ -6,6 +6,8 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { ModeToggle } from '@/components/theme/toggle-theme';
 // import { CustomCursor } from '@/components/interactive/custom-cursor';
 import { RootLayoutClient } from '@/components/layout/RootLayoutClient';
+import { LanguageProvider } from '@/components/layout/LanguageProvider';
+import { getMessages } from '@/lib/locales';
 
 export function generateMetadata(): Metadata {
   const config = getConfig();
@@ -36,7 +38,9 @@ export default function RootLayout({
         >
           <ModeToggle />
           {/* <CustomCursor /> */}
-          <RootLayoutClient>{children}</RootLayoutClient>
+          <LanguageProvider translations={getMessages()}>
+            <RootLayoutClient>{children}</RootLayoutClient>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

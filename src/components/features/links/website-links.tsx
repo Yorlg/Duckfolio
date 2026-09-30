@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/packages/ui/card';
+} from '@/components/ui/card';
 
 export function WebsiteLinks() {
   const { websiteLinks } = useProfileStore();

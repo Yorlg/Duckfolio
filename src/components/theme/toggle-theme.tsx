@@ -5,7 +5,7 @@ import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/packages/ui/button';
+import { Button } from '@/components/ui/button';
 // import { cn } from '@/lib/utils';
 
 export function ModeToggle() {
@@ -81,7 +81,7 @@ export function ModeToggle() {
   return (
     <motion.div
       className="fixed bottom-4 right-4 z-50"
-      initial={{ y: 100, opacity: 0 }}
+      initial={{ y: 100, opacity: 1 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
     >
@@ -95,7 +95,7 @@ export function ModeToggle() {
           {resolvedTheme === 'dark' ? (
             <motion.div
               key="sun"
-              initial={{ rotate: -180, opacity: 0, scale: 0.5 }}
+              initial={{ rotate: -180, opacity: 1, scale: 0.5 }}
               animate={{ rotate: 0, opacity: 1, scale: 1 }}
               exit={{ rotate: 180, opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -106,7 +106,7 @@ export function ModeToggle() {
           ) : (
             <motion.div
               key="moon"
-              initial={{ rotate: 180, opacity: 0, scale: 0.5 }}
+              initial={{ rotate: 180, opacity: 1, scale: 0.5 }}
               animate={{ rotate: 0, opacity: 1, scale: 1 }}
               exit={{ rotate: -180, opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}

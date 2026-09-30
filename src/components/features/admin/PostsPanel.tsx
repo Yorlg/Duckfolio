@@ -4,6 +4,7 @@ import { Eye, EyeOff, ExternalLink, Loader2, Pencil, Plus, RefreshCw, Trash2 } f
 import { Button } from '@/components/ui/button';
 import { AdminNotice } from './AdminShared';
 import type { AdminPostSummary } from './types';
+import { useTranslation } from 'react-i18next';
 import { formatPostDate } from './utils';
 
 export function PostsPanel({
@@ -25,13 +26,16 @@ export function PostsPanel({
   onToggleVisibility: (post: AdminPostSummary) => void | Promise<void>;
   posts: AdminPostSummary[];
 }) {
+  const { t, i18n } = useTranslation('admin');
+  const language: 'en' | 'zh-CN' = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-CN';
+
   return (
     <section className="grid gap-4">
       <div className="flex flex-col gap-3 border-b border-[#121212]/10 pb-4 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-medium">文章列表</h2>
+          <h2 className="text-xl font-medium">{t("postList")}</h2>
           <p className="mt-1 text-sm text-[#121212]/50 dark:text-white/50">
-            当前发布目标中的 posts 目录。
+            {t("postDirectoryDescription")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -44,11 +48,11 @@ export function PostsPanel({
             <RefreshCw
               className={`size-4 ${isLoading ? 'animate-spin' : ''}`}
             />
-            刷新
+            {t("refresh")}
           </Button>
           <Button className="gap-2" type="button" onClick={onNewPost}>
             <Plus className="size-4" />
-            新建文章
+            {t("newPost")}
           </Button>
         </div>
       </div>
@@ -56,7 +60,7 @@ export function PostsPanel({
       {isLoading ? (
         <div className="flex items-center gap-2 rounded-lg border border-[#121212]/10 px-4 py-6 text-sm text-[#121212]/60 dark:border-white/10 dark:text-white/60">
           <Loader2 className="size-4 animate-spin" />
-          正在读取文章列表...
+          {t("loadingPostList")}
         </div>
       ) : posts.length ? (
         <div className="grid gap-3">
@@ -80,7 +84,7 @@ export function PostsPanel({
                           : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-200'
                       }`}
                     >
-                      {post.draft ? '草稿' : '公开'}
+                      {post.draft ? t("draft") : t("public")}
                     </span>
                   </div>
                   <p className="mt-1 truncate text-sm text-[#121212]/50 dark:text-white/50">
@@ -107,14 +111,14 @@ export function PostsPanel({
 
                 <div className="flex flex-col gap-3 md:items-end">
                   <time className="text-sm text-[#121212]/50 dark:text-white/50">
-                    {formatPostDate(post.date)}
+                    {formatPostDate(post.date, language, t)}
                   </time>
                   <div className="flex flex-wrap justify-end gap-2">
                     <Button
-                      aria-label="编辑文章"
+                      aria-label={t("editPost")}
                       className="size-9 p-0"
                       disabled={isMutating}
-                      title="编辑文章"
+                      title={t("editPost")}
                       type="button"
                       variant="outline"
                       onClick={() => void onEditPost(post.slug)}
@@ -126,10 +130,10 @@ export function PostsPanel({
                       )}
                     </Button>
                     <Button
-                      aria-label={post.draft ? '设为公开' : '设为草稿'}
+                      aria-label={post.draft ? t("makePublic") : t("makeDraft")}
                       className="size-9 p-0"
                       disabled={isMutating}
-                      title={post.draft ? '设为公开' : '设为草稿'}
+                      title={post.draft ? t("makePublic") : t("makeDraft")}
                       type="button"
                       variant="outline"
                       onClick={() => void onToggleVisibility(post)}
@@ -143,9 +147,9 @@ export function PostsPanel({
                     {!post.draft && (
                       <Button
                         asChild
-                        aria-label="查看文章"
+                        aria-label={t("viewPost")}
                         className="size-9 p-0"
-                        title="查看文章"
+                        title={t("viewPost")}
                         type="button"
                         variant="outline"
                       >
@@ -159,10 +163,10 @@ export function PostsPanel({
                       </Button>
                     )}
                     <Button
-                      aria-label="删除文章"
+                      aria-label={t("deletePost")}
                       className="size-9 p-0 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300"
                       disabled={isMutating}
-                      title="删除文章"
+                      title={t("deletePost")}
                       type="button"
                       variant="outline"
                       onClick={() => void onDeletePost(post.slug)}
@@ -177,8 +181,7 @@ export function PostsPanel({
         </div>
       ) : (
         <AdminNotice>
-          当前目标分支没有可显示的文章。确认 GITHUB_REPO 和 GITHUB_BRANCH
-          指向你的 deploy 分支后再刷新。
+          {t("noPostsInTargetBranch")}
         </AdminNotice>
       )}
     </section>

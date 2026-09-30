@@ -1,0 +1,210 @@
+nav:
+  profile: 首页
+  links: 链接
+  blog: 博客
+  projects: 项目
+profile:
+  greeting: 你好，
+  introduction: "我是 "
+links:
+  heading: 我的链接
+projects:
+  heading: 项目
+  description: 我创建或维护的项目。
+  categories: 项目分类
+blog:
+  empty: 暂无博客文章
+  create: 创建你的第一篇文章 →
+post:
+  back: 返回
+footer:
+  copyright: 保留所有权利。
+language:
+  switch: Switch to English
+admin:
+  dashboard: 首页
+  contentOverviewAndPublishingStatus: 内容概览和发布状态。
+  loadingOverviewData: 正在读取概览数据...
+  totalPosts: 文章总数
+  publicPosts: 公开文章
+  draftPosts: 草稿文章
+  publishingTrend: 发布趋势
+  postCountOverTheLastSixMonths: 最近 6 个月文章数量。
+  postStatus: 文章状态
+  publicToDraftRatio: 公开与草稿比例。
+  public: 公开
+  draft: 草稿
+  countPosts: "{{count}} 篇"
+  nameCountPosts: "{{name}}: {{count}} 篇"
+  nameCountPostsPercentage: "{{name}}: {{count}} 篇 ({{percentage}}%)"
+  noPosts: 暂无文章
+  postList: 文章列表
+  postDirectoryDescription: 当前发布目标中的 posts 目录。
+  refresh: 刷新
+  newPost: 新建文章
+  loadingPostList: 正在读取文章列表...
+  editPost: 编辑文章
+  makePublic: 设为公开
+  makeDraft: 设为草稿
+  viewPost: 查看文章
+  deletePost: 删除文章
+  noPostsInTargetBranch: 当前目标分支没有可显示的文章。确认 GITHUB_REPO 和 GITHUB_BRANCH 指向你的 deploy 分支后再刷新。
+  editingPostsSlugMd: 正在编辑 posts/{{slug}}.md
+  title: 标题
+  postPath: 文章路径
+  publishDate: 发布时间
+  tags: 标签
+  summary: 摘要
+  saveAsDraft: 保存为草稿
+  draftVisibilityHint: "勾选后文章会写入 posts 目录，但前台不会展示 draft: true。"
+  cancel: 取消
+  updatePost: 更新文章
+  publishPost: 发布文章
+  add: 添加
+  startWriting: 开始写文章...
+  exitFullscreenWriting: 退出全屏写作
+  fullscreenWriting: 全屏写作
+  invalidDate: 日期无效
+  unknownDate: 未知日期
+  modelKeyHint: 填写 API Key 后会读取该 Base URL 的模型。
+  loadingModelList: 正在读取模型列表...
+  failedToLoadModelList: 模型列表读取失败。
+  loadedCountModels: 已读取 {{count}} 个模型。
+  noModelsFoundYouCanEnterAModelID: 未读取到模型，可手动填写 Model ID。
+  getLabel: 获取 {{label}}
+  hide: 隐藏
+  show: 显示
+  settings: 设置
+  configureAIAPIKeysAndPreferences: 配置 AI 接口密钥和偏好设置。
+  aIAPIKey: AI API 密钥
+  baseURLAPIEndpoint: Base URL（接口地址）
+  model: 模型
+  searchModels: 搜索模型...
+  loadingModels: 正在加载模型...
+  noModelsFound: 未找到模型。
+  modelID: 模型 ID
+  saveSettings: 保存设置
+  settingsSessionHint: 配置仅保存在当前浏览器标签页的会话中，关闭标签页后会自动清除。
+  mediaLibrary: 媒体资源
+  failedToLoadMediaList: 媒体列表读取失败。
+  failedToUploadName: "{{name}} 上传失败。"
+  filesUploadedSuccessfully: 文件上传成功。
+  failedToUploadFiles: 文件上传失败。
+  confirmDeleteMedia: 确认删除 {{path}}？此操作会提交到目标分支。
+  failedToDeleteMediaFile: 媒体文件删除失败。
+  mediaFileDeleted: 媒体文件已删除。
+  linkCopied: 已复制链接。
+  uploadFiles: 上传文件
+  loading: 加载中...
+  noMediaFiles: 暂无媒体文件。
+  copyLink: 复制链接
+  delete: 删除
+  addGroup: 添加分组
+  addProject: 添加项目
+  avatarPath: 头像路径
+  bio: 简介
+  deleteGroup: 删除分组
+  deleteProject: 删除项目
+  description: 描述
+  groups: 组
+  icon: 图标
+  nextPage: 下一页
+  page: 页
+  previousPage: 上一页
+  searchIcons: 搜索图标...
+  currentIcon: 当前图标
+  items: 项
+  name: 名称
+  noProjectGroupsYet: 还没有项目分组。
+  thisGroupHasNoProjectsYet: 这个分组还没有项目。
+  noSocialLinksYet: 还没有社交链接。
+  noWebsiteLinksYet: 还没有网站链接。
+  platform: 平台
+  siteNameAvatarAndBio: 站点名称、头像和简介。
+  basic: 基础
+  basicInformation: 基础资料
+  projectsDescription: Projects 页面展示的项目分类和项目。
+  projectGroups: 项目分组
+  saveConfiguration: 保存配置
+  groupID: 分组 ID
+  groupTitle: 分组标题
+  socialLinksDescription: 首页展示的社交平台入口。
+  socialLinks: 社交链接
+  websiteLinksDisplayedOnTheLinksPage: Links 页面展示的网站入口。
+  websiteLinks: 网站链接
+  failedToUploadSiteImage: 站点图片上传失败。
+  avatarSavedHint: 头像已替换；请保存配置以使用新头像路径。
+  logoReplaced: Logo 已替换。
+  uploadAvatarPNG: 上传头像（PNG）
+  uploadLogoPNG: 上传 Logo（PNG）
+  currentAvatar: 当前头像
+  currentLogo: 当前 Logo
+  replaceAvatar: 替换头像
+  replaceLogo: 替换 Logo
+  siteImageDeploymentHint: 图片直接覆盖 public/avatar.png 或 public/logo.png；GitHub 模式需部署后生效。头像上传后请保存站点配置。
+  noMatchingIconsFound: 没有找到匹配的图标
+  enterAdminPassword: 请输入管理员口令。
+  enterAdministratorPassphrase: 请输入管理员口令
+  incorrectAdminPassword: 管理员口令不正确。
+  failedToLoadAdminStatus: 后台状态读取失败。
+  loadingPublishingTarget: 正在读取发布目标
+  localConfigurationEditingMode: 本地配置编辑模式
+  missingAdminPasswordNotice: 未检测到 ADMIN_PASSWORD，写入接口会拒绝请求。请在部署平台的环境变量里配置，不要写入仓库。
+  missingGitHubConfigNotice: 未检测到 GitHub 写入配置，文章发布不会在本地 main 工作区创建 posts 目录。GITHUB_BRANCH 未配置时默认使用 deploy。
+  failedToLoadThePostList: 文章列表读取失败。
+  adminPasswordRequired: 请先输入管理员口令。
+  failedToLoadThePost: 文章读取失败。
+  failedToUpdatePostStatus: 文章状态更新失败。
+  postStatusUpdated: 文章状态已更新。
+  confirmDeletePost: 确认删除 posts/{{slug}}.md？此操作会提交到目标分支。
+  failedToDeleteThePost: 文章删除失败。
+  postDeleted: 文章已删除。
+  failedToPublishThePost: 文章发布失败。
+  pushedToRepoPath: 已推送到 {{repo}}/{{path}}
+  writtenToPath: 已写入 {{path}}
+  postSaved: 文章已保存。
+  failedToSaveConfiguration: 配置保存失败。
+  configurationPushedToRepoPath: 配置已推送到 {{repo}}/{{path}}
+  configurationWrittenToPath: 配置已写入 {{path}}
+  configurationSaved: 配置已保存。
+  administratorVerification: 管理员验证
+  verifying: 验证中…
+  enterAdminPanel: 进入管理后台
+  backToHome: 返回首页
+  contentManagement: 内容管理
+  actions: 操作
+  logOut: 退出登录
+  siteConfiguration: 站点配置
+  invalidAdminPasswordResponse: 管理员口令错误或未配置，请检查 ADMIN_PASSWORD。
+  permissionDenied: 没有权限执行该操作，请检查管理员口令。
+  adminApiNotFound: 后台接口不存在，请确认部署包含 /api/admin/* 路由。
+  adminApiUnexpectedHtml: 后台接口返回了 HTML 页面而不是 JSON，请检查 Vercel 部署中的 /api/admin/* 路由。
+  invalidAdminPassword: 管理员口令未配置或不正确。
+  enterAValidPostPath: 请输入有效的文章路径。
+  localPostDeleteBlocked: 未配置 GitHub 写入，已阻止在本地 main 工作区删除 posts 文件。
+  postNotFound: 文章不存在。
+  localMediaDeleteBlocked: 未配置 GitHub 写入，已阻止在本地模式下删除媒体文件。
+  localPostCreateBlocked: 未配置 GitHub 写入，已阻止在本地 main 工作区创建 posts 目录。
+  gitHubWriteFailed: GitHub 写入失败。
+  writingToThisPathIsNotAllowed: 不允许写入该路径。
+  localWriteRestricted: 本地模式只允许保存站点配置和媒体文件。
+  readingFromThisPathIsNotAllowed: 不允许读取该路径。
+  postSetToDraft: 文章已设为草稿。
+  postMadePublic: 文章已设为公开。
+  failedToUpdateThePost: 文章更新失败。
+  postPublished: 文章发布成功。
+  postUpdated: 文章更新成功。
+  failedToDeleteTheOldPostPath: 旧文章路径删除失败。
+  configurationSaveSucceeded: 配置保存成功。
+  enterAPostTitle: 请输入文章标题。
+  postBodyCannotBeEmpty: 文章正文不能为空。
+  selectAFileToUpload: 请选择要上传的文件。
+  fileCannotBeEmpty: 文件不能为空。
+  fileMustBe50MBOrSmaller: 文件不能超过 50MB。
+  unsupportedFileType: 不支持该文件类型。
+  specifyAMediaPathToDelete: 请指定要删除的媒体路径。
+  selectAnAvatarOrLogo: 请选择头像或 Logo。
+  uploadAPNGImageNoLargerThan5MB: 请上传不超过 5MB 的 PNG 图片。
+  invalidPNGImageContent: PNG 图片内容无效。
+  siteImageUpdated: 站点图片已更新。
+  postSavedOldPathCleanupFailed: 文章已保存，但旧路径删除失败：{{reason}}

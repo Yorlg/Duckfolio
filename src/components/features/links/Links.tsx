@@ -3,24 +3,26 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, ChevronRight } from 'lucide-react';
 import { WebsiteLink } from '@/types/platform-config';
+import { useTranslation } from 'react-i18next';
 
 interface LinksProps {
   websiteLinks: WebsiteLink[];
 }
 
 export function Links({ websiteLinks }: LinksProps) {
+  const { t } = useTranslation();
   return (
     <div className="mx-auto w-full pt-24 md:pt-32 pb-16">
       <motion.h2
         className="text-2xl sm:text-3xl font-bold mb-8 md:mb-12 flex items-center"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 1, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         <span className="bg-(--theme-primary)/10 dark:bg-(--theme-primary)/20 text-(--theme-primary) dark:text-(--theme-secondary) p-3 rounded-xl mr-4 flex items-center justify-center">
           <ExternalLink size={24} />
         </span>
-        我的链接
+        {t('links.heading')}
       </motion.h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -31,7 +33,7 @@ export function Links({ websiteLinks }: LinksProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="group block"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
             whileHover={{ scale: 1.02 }}

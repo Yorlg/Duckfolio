@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface PlateMarkdownEditorProps {
   markdown: string;
@@ -37,6 +38,7 @@ export function PlateMarkdownEditor({
   markdown,
   onMarkdownChange,
 }: PlateMarkdownEditorProps) {
+  const { t } = useTranslation('admin');
   const didLoadInitialMarkdown = useRef(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const editor = usePlateEditor({
@@ -99,7 +101,7 @@ export function PlateMarkdownEditor({
           >
             <Editor
               className="min-h-full"
-              placeholder="开始写文章..."
+              placeholder={t("startWriting")}
               variant="demo"
             />
           </EditorContainer>
@@ -109,7 +111,7 @@ export function PlateMarkdownEditor({
       </div>
 
       <motion.div
-        className="fixed bottom-17 right-4 z-50"
+        className="fixed bottom-28 right-4 z-50"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
@@ -117,7 +119,7 @@ export function PlateMarkdownEditor({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              aria-label={isFullscreen ? '退出全屏写作' : '全屏写作'}
+              aria-label={isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
               className="rounded-full backdrop-blur-sm shadow-lg hover:shadow-primary/20 hover:border-primary/40 hover:scale-105 transition-all duration-300 ease-in-out"
               size="icon"
               variant="outline"
@@ -131,7 +133,7 @@ export function PlateMarkdownEditor({
             </Button>
           </TooltipTrigger>
           <TooltipContent side="left">
-            {isFullscreen ? '退出全屏写作' : '全屏写作'}
+            {isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
           </TooltipContent>
         </Tooltip>
       </motion.div>

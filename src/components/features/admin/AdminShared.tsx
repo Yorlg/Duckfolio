@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 export function AdminNotice({ children }: { children: ReactNode }) {
   return (
@@ -26,9 +27,9 @@ export function NavButton({
   return (
     <Button
       className={[
-        'h-auto min-w-0 w-full justify-start rounded-lg px-4 py-3 text-left text-sm transition-colors',
+        'h-auto w-full justify-start rounded-lg px-4 py-3 text-left text-sm transition-colors',
         active
-          ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary dark:hover:text-primary-foreground'
+          ? 'bg-[#121212] text-white hover:bg-[#121212] hover:text-white dark:bg-white dark:text-black dark:hover:bg-white dark:hover:text-black'
           : 'bg-transparent text-[#121212]/60 hover:bg-[#121212]/5 hover:text-[#121212] dark:bg-transparent dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white',
       ].join(' ')}
       type="button"
@@ -41,13 +42,7 @@ export function NavButton({
   );
 }
 
-export function Field({
-  children,
-  label,
-}: {
-  children: ReactNode;
-  label: string;
-}) {
+export function Field({ children, label }: { children: ReactNode; label: string }) {
   return (
     <div className="grid gap-2">
       <span className="text-sm text-[#121212]/50 dark:text-white/50">
@@ -65,6 +60,8 @@ export function EditableListHeader({
   label: string;
   onAdd: () => void;
 }) {
+  const { t } = useTranslation('admin');
+
   return (
     <div className="flex items-center justify-between border-b border-[#121212]/10 pb-3 dark:border-white/10">
       <h2 className="text-lg font-medium">{label}</h2>
@@ -75,7 +72,7 @@ export function EditableListHeader({
         onClick={onAdd}
       >
         <Plus size={16} />
-        添加
+        {t("add")}
       </Button>
     </div>
   );

@@ -78,7 +78,11 @@ export interface AdminPostDetail extends AdminPostSummary {
   content: string;
 }
 
-const allowedLocalFiles = new Set(['public/platform-config.json']);
+const allowedLocalFiles = new Set([
+  'public/platform-config.json',
+  'public/avatar.png',
+  'public/logo.png',
+]);
 const mediaPathPattern =
   /^content\/media\/(photos|videos|audio|files)\/\d{4}\/[a-z0-9][a-z0-9.-]*\.[a-z0-9]+$/;
 
@@ -874,8 +878,8 @@ function getLocalWritePath(filePath: string) {
 
   const normalized = filePath.replace(/\\/g, '/');
 
-  if (normalized === 'public/platform-config.json') {
-    return path.join(process.cwd(), 'public', 'platform-config.json');
+  if (allowedLocalFiles.has(normalized)) {
+    return path.join(process.cwd(), 'public', path.basename(normalized));
   }
 
   if (isMediaPath(normalized)) {
@@ -891,7 +895,7 @@ function getLocalWritePath(filePath: string) {
     );
   }
 
-  throw new Error('本地模式只允许保存 platform-config.json。');
+  throw new Error('本地模式只允许保存站点配置和媒体文件。');
 }
 
 function getLocalPostReadPath(filePath: string) {

@@ -94,6 +94,16 @@ AI_MODEL=gpt-4o-mini
 - 没有 GitHub 写入配置时，后台不会在本地 `main` 工作区创建或删除 `posts` 目录。
 - 本地开发可以复制 `.env.example` 为 `.env.local`，`.env*` 文件已被忽略，只有 `.env.example` 会提交。
 
+## 多语言
+
+- 公开页面与 /admin 后台使用 i18next/react-i18next 读取 locales/en.yaml 和 locales/zh-CN.yaml；两份词典的 key 相同。
+- 右下角语言按钮可切换中英文，选择保存在浏览器。管理员自定义的站点信息和文章内容不自动翻译。
+
+## 站点图片与目录结构
+
+- UI 组件统一放在 src/components/ui。
+- 后台站点配置可以上传不超过 5MB 的 PNG 头像和 Logo，覆盖 public/avatar.png 和 public/logo.png。头像上传后还需保存配置；GitHub 写入模式需等待目标分支部署。
+
 ## 发布机制
 
 点击 `/admin` 的发布或更新后，服务端接口会把文章写入：

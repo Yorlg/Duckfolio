@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface BlogPost {
   slug: string;
@@ -18,6 +19,8 @@ interface BlogProps {
 }
 
 export function Blog({ posts }: BlogProps) {
+  const { t, i18n } = useTranslation();
+  const language = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-CN';
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -44,20 +47,20 @@ export function Blog({ posts }: BlogProps) {
     <div className="flex flex-col justify-center flex-1 py-20">
       <div className="max-w-3xl mx-auto w-full px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           {years.length === 0 ? (
             <div className="text-center py-32">
               <p className="text-[#121212]/30 dark:text-white/30">
-                暂无博客文章
+                {t('blog.empty')}
               </p>
               <a
                 href="/admin"
                 className="text-sm text-[#121212]/40 dark:text-white/40 hover:text-[#121212] dark:hover:text-white transition-colors mt-3 inline-block"
               >
-                创建你的第一篇文章 →
+                {t('blog.create')}
               </a>
             </div>
           ) : (
@@ -71,11 +74,11 @@ export function Blog({ posts }: BlogProps) {
                     {postsByYear[year].map((post, index) => {
                       const postDate = new Date(post.date);
                       const formattedDate = isClient
-                        ? postDate.toLocaleDateString(undefined, {
+                        ? postDate.toLocaleDateString(language, {
                             month: 'short',
                             day: 'numeric',
                           })
-                        : postDate.toLocaleDateString('en-US', {
+                        : postDate.toLocaleDateString('zh-CN', {
                             month: 'short',
                             day: 'numeric',
                           });
@@ -83,7 +86,7 @@ export function Blog({ posts }: BlogProps) {
                       return (
                         <Link key={post.slug} href={`/posts/${post.slug}`}>
                           <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 1, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{
                               duration: 0.5,

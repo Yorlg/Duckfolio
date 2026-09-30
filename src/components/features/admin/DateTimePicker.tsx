@@ -1,10 +1,12 @@
 'use client';
 
+import { enUS, zhCN } from 'date-fns/locale';
 import { CalendarIcon, Clock3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { formatDateTimeLabel, parseDateTime, toDatetimeLocal } from './utils';
+import { useTranslation } from 'react-i18next';
 
 export function DateTimePicker({
   onChange,
@@ -13,6 +15,8 @@ export function DateTimePicker({
   onChange: (value: string) => void;
   value: string;
 }) {
+  const { t, i18n } = useTranslation('admin');
+  const language: 'en' | 'zh-CN' = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-CN';
   const selectedDate = parseDateTime(value) ?? new Date();
   const timeValue =
     value?.slice(11, 16) || toDatetimeLocal(selectedDate).slice(11, 16);
@@ -45,11 +49,12 @@ export function DateTimePicker({
             variant="outline"
           >
             <CalendarIcon className="size-4 text-[#121212]/50 dark:text-white/50" />
-            {formatDateTimeLabel(value)}
+            {formatDateTimeLabel(value, t, language)}
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-auto p-0">
           <Calendar
+            locale={language === 'en' ? enUS : zhCN}
             mode="single"
             selected={selectedDate}
             onSelect={updateDate}
