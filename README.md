@@ -1,137 +1,53 @@
-# 🦆 Duckfolio
+# Duckfolio
 
-**Duckfolio** 是一个简洁、现代、有趣的个人主页模板。
+基于 Next.js 16 的个人主页、博客和内容管理后台。公开页面包括首页、友链、博客与项目；`/admin` 可编辑站点配置、管理文章和媒体。
 
-本项目旨在为开发者、设计师或创作者提供一个清爽、易于维护的在线名片，快速展示你的个人信息、社交链接与博客等内容。  
-同时也展示了如何使用现代 Web 技术（Next.js、TailwindCSS、Shadcn UI 等）构建轻量级的静态网站。
+## 功能
 
----
+- 首页可在经典布局与极简名片间切换；站点名称、头像、简介、社交入口可在后台维护。
+- 上传头像后提取主题色并写入配置，首屏直接使用该配色；支持浅色、深色主题和中英文切换。
+- 博客支持草稿、Markdown 编辑与媒体上传；站点配置和文章可通过 GitHub Contents API 写入指定分支。
+- 友链由站长在后台管理；项目分组可在后台编辑。
+- Vercel Web Analytics 采集站点访问；后台概览可读取最近 30 天的访问数据（需另配 Vercel API token）。
 
-## ✨ 项目特色
+## 环境要求与本地运行
 
-- 🚀 使用 **Next.js 15 + Turbopack**，极速开发体验
-- 🎨 采用 **Tailwind CSS 4** 实现原子化、响应式布局
-- 🌗 支持 **深色/浅色主题自动切换**
-- 💫 利用 **Framer Motion** 增添自然平滑的过渡动画
-- 🧩 使用 **Shadcn UI** 构建现代交互组件
-- 🧠 通过 **Zustand** 管理全局状态（如主题）
-- 📱 完全响应式，适配移动端和大屏设备
-- 🧼 结构清晰，易于维护和定制
-
----
-
-## 🖼️ 页面预览
-
-### 首页 - Profile  
-![Preview](https://blog.yorlg.it/wp-content/uploads/2025/05/Duckfolio-Profile.png)
-
-### 链接页 - Links  
-![Preview](https://blog.yorlg.it/wp-content/uploads/2025/05/Duckfolio-Links.png)
-
----
-
-## 🛠️ 使用技术
-
-| 技术                                                      | 用途         |
-| --------------------------------------------------------- | ------------ |
-| [Next.js](https://nextjs.org/)                            | 框架         |
-| [Turbopack](https://turbo.build/pack)                     | 构建工具     |
-| [Tailwind CSS](https://tailwindcss.com/)                  | 样式框架     |
-| [Shadcn UI](https://ui.shadcn.com/ )                      | 无障碍组件库 |
-| [Framer Motion](https://www.framer.com/motion/)           | 动画库       |
-| [Zustand](https://github.com/pmndrs/zustand)              | 状态管理     |
-| [next-themes](https://github.com/pacocoursey/next-themes) | 主题切换     |
-| [Lucide Icons](https://lucide.dev/)                       | 图标         |
-
----
-
-## 🚀 快速开始
-
-### 1. 克隆仓库
+- Node.js `>=22.22.1`
+- pnpm `>=11`（项目使用 `pnpm@11.2.2`）
 
 ```bash
 git clone https://github.com/Yorlg/Duckfolio.git
-cd duckfolio
-
-# 安装依赖
-pnpm install
-
-# 项目打包
-pnpm build
-
-# 启动服务器
+cd Duckfolio
+pnpm install --frozen-lockfile
+cp .env.example .env.local # Windows 可手动复制
 pnpm dev
 ```
 
-本地访问：
+访问 `http://localhost:3000`；后台位于 `http://localhost:3000/admin`。`pnpm build` 构建，`pnpm start` 启动构建产物。
 
-- 站点首页：`http://localhost:3000`
-- 管理后台：`http://localhost:3000/admin`
+## 配置和发布文章
 
-## 后台配置
+复制 `.env.example` 并在本地设置以下服务端变量；部署时改在平台环境变量中设置，**不要提交真实密钥**，也不要使用 `NEXT_PUBLIC_*` 前缀：
 
-真实密钥不要提交到仓库，也不要放到 `NEXT_PUBLIC_*` 变量里。生产环境请在部署平台的 Environment Variables / Secrets 中配置：
-
-```bash
-GITHUB_TOKEN=your_github_token
+```dotenv
+GITHUB_TOKEN=your_fine_grained_token
 GITHUB_REPO=owner/repo
 GITHUB_BRANCH=deploy
 ADMIN_PASSWORD=your_admin_password
 ```
 
-可选 AI 配置：
+`GITHUB_TOKEN` 建议只授予目标仓库 `Contents: Read and write` 权限。后台写入 `GITHUB_BRANCH` 指定分支的 `posts/*.md` 和 `public/platform-config.json`；只有目标分支被部署时，线上内容才会更新。未配置 GitHub 写入时，后台仅允许本地保存配置和媒体，不会在本地工作区创建或删除文章。上传头像、Logo 限 PNG，最大 5 MB；上传头像后仍需保存站点配置。
 
-```bash
-AI_GATEWAY_API_KEY=your_ai_api_key
-AI_BASE_URL=https://api.openai.com/v1
-AI_MODEL=gpt-4o-mini
-```
+默认资料在 `public/platform-config.json`，翻译词典在 `locales/zh-CN.yaml` 与 `locales/en.yaml`。站点自定义资料和文章正文不会自动翻译。
 
-说明：
-
-- `GITHUB_BRANCH` 未配置时默认使用 `deploy`。
-- `GITHUB_TOKEN` 建议使用 Fine-grained token，只给目标仓库 `Contents: Read and write` 权限。
-- 没有 GitHub 写入配置时，后台不会在本地 `main` 工作区创建或删除 `posts` 目录。
-- 本地开发可以复制 `.env.example` 为 `.env.local`，`.env*` 文件已被忽略，只有 `.env.example` 会提交。
-
-## 多语言
-
-- 公开页面与 /admin 后台使用 i18next/react-i18next 读取 locales/en.yaml 和 locales/zh-CN.yaml；两份词典的 key 相同。
-- 右下角语言按钮可切换中英文，选择保存在浏览器。管理员自定义的站点信息和文章内容不自动翻译。
-
-## 站点图片与目录结构
-
-- UI 组件统一放在 src/components/ui。
-- 后台站点配置可以上传不超过 5MB 的 PNG 头像和 Logo，覆盖 public/avatar.png 和 public/logo.png。头像上传后还需保存配置；GitHub 写入模式需等待目标分支部署。
-
-## 发布机制
-
-点击 `/admin` 的发布或更新后，服务端接口会把文章写入：
-
-```text
-posts/{slug}.md
-```
-
-文章文件会提交到 `GITHUB_REPO` 的 `GITHUB_BRANCH`。建议你自己使用 `deploy` 分支存放文章，这样别人 fork 或使用 `main` 分支时不会同步你的个人文章。
+可选的 AI 和 Web Analytics 环境变量见 `.env.example` 与 [Vercel 部署指南](docs/deploy-to-Vercel.md)。**访问数据采集无需额外 token**；仅在 `/admin` 直接读取 Vercel Analytics 数据时需创建 Vercel Access Token 并配置 `VERCEL_TOKEN`。未配置时后台显示明确提示。
 
 ## 部署
 
-当前支持 Vercel 和 ~~Cloudflare Workers~~。详细说明见：
+[Vercel 部署指南](docs/deploy-to-Vercel.md)。站点依赖 Next.js 服务端 API，不是纯静态导出。推荐用 `deploy` 分支部署，将个人文章留在该分支；生产分支应与 `GITHUB_BRANCH` 对齐。
 
-- [docs/deploy-to-Vercel.md](docs/deploy-to-Vercel.md)
-- ~~[docs/deploy-to-Cloudflare.md](docs/deploy-to-Cloudflare.md)~~
+## Releases 与安全更新
 
-关键要求：
+[Releases](https://github.com/Yorlg/Duckfolio/releases) 由 `vX.Y.Z` 标签触发，版本必须与 `package.json` 和 `CHANGELOG.md` 的首条记录一致。仅发布 GitHub 自动生成的 **Source code (zip)** 与 **Source code (tar.gz)**，不上传额外资产。更新流程：先将变更合并到目标发布分支，再创建并推送对应版本标签；GitHub Actions 自动从该版本的 Changelog 提取说明并创建 Release。
 
-- 部署平台必须支持 Next.js 服务端 API。
-- 生产分支应与 `GITHUB_BRANCH` 保持一致，例如都使用 `deploy`。
-- ~~Cloudflare 不能使用纯静态导出，需要使用 Workers / OpenNext 方式部署。~~
-
-## 常用命令
-
-```bash
-pnpm dev
-pnpm build
-pnpm start
-```
-
+依赖审查可使用 `pnpm --registry=https://registry.npmjs.org audit`。不要将 Dependabot PR 的标题等同于实际修复：合并前应检查锁文件中易受攻击的版本是否确实移除。`braces@3.0.3` 的 [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) 目前没有已发布的修复版本；继续跟踪上游，不通过虚假的版本覆盖或关闭警告声称修复。
