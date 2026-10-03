@@ -56,10 +56,10 @@ export const ColumnElement = withHOC(
       orientation: 'horizontal',
       type: 'column',
       canDropNode: ({ dragEntry, dropEntry }) =>
-        PathApi.equals(
+        Boolean(dragEntry && PathApi.equals(
           PathApi.parent(dragEntry[1]),
           PathApi.parent(dropEntry[1])
-        ),
+        )),
     });
 
     return (
