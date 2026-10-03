@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
 import type { ProfileConfig } from '@/types/platform-config';
+import { validAvatarTheme } from '@/lib/avatar-theme';
 
 type WriteMode = 'github' | 'local';
 
@@ -182,6 +183,8 @@ export function validatePlatformConfig(config: ProfileConfig): ProfileConfig {
       avatar: String(config.profile?.avatar || ''),
       bio: String(config.profile?.bio || ''),
       name: String(config.profile?.name || ''),
+      style: config.profile?.style === 'minimal' ? 'minimal' : 'classic',
+      theme: validAvatarTheme(config.profile?.theme, config.profile?.avatar) ? config.profile.theme : undefined,
     },
     projectSections: (config.projectSections || []).map((section) => ({
       id: String(section.id || ''),

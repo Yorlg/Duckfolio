@@ -1,31 +1,32 @@
 'use client';
 
-import { useEffect } from 'react';
-import ColorThief from 'color-thief-browser';
+import { useEffect, useState } from 'react';
+import type { Profile } from '@/types/platform-config';
+import { extractAvatarTheme, validAvatarTheme } from './avatar-theme';
 
-function rgbToRgba(rgb: number[], alpha = 1) {
-  return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
-}
+export function useDynamicTheme(profile: Profile) {
+  const hasTheme = validAvatarTheme(profile.theme, profile.avatar);
+  const [ready, setReady] = useState(hasTheme || !profile.avatar);
 
-export function useDynamicTheme(avatarUrl: string) {
   useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = avatarUrl;
+    let cancelled = false;
+    if (hasTheme || !profile.avatar) {
+      setReady(true);
+      return;
+    }
+    setReady(false);
+    extractAvatarTheme(profile.avatar)
+      .then(theme => {
+        if (cancelled) return;
+        document.documentElement.style.setProperty('--theme-primary', theme.primary);
+        document.documentElement.style.setProperty('--theme-secondary', theme.secondary);
+      })
+      .catch(() => {
+        // An unavailable/CORS-blocked avatar must not leave the site stuck loading.
+      })
+      .finally(() => { if (!cancelled) setReady(true); });
+    return () => { cancelled = true; };
+  }, [profile.avatar, hasTheme]);
 
-    img.onload = () => {
-      const thief = new ColorThief();
-      const main = thief.getColor(img); // 主色
-      const palette = thief.getPalette(img, 3); // 取更多颜色
-
-      const [primary, secondary = main] = [main, palette[1]];
-      const style = document.documentElement.style;
-
-      // console.log(primary);
-      // console.log(secondary);
-
-      style.setProperty('--theme-primary', rgbToRgba(primary));
-      style.setProperty('--theme-secondary', rgbToRgba(secondary));
-    };
-  }, [avatarUrl]);
+  return ready;
 }

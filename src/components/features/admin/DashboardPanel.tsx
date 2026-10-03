@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import type { EChartsOption } from 'echarts';
 import { BarChart3, Loader2 } from 'lucide-react';
@@ -9,9 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { getMonthlyPostCounts } from './utils';
 
 export function DashboardPanel({
+  adminToken,
   isLoading,
   posts,
 }: {
+  adminToken: string;
   isLoading: boolean;
   posts: AdminPostSummary[];
 }) {
@@ -23,6 +25,26 @@ export function DashboardPanel({
   const monthlyPosts = getMonthlyPostCounts(posts, language);
   const monthlyChartOption = createMonthlyChartOption(monthlyPosts, t);
   const statusChartOption = createStatusChartOption(publicPosts, draftPosts, t);
+  const [analytics, setAnalytics] = useState<{ count: { pageviews: number; visitors: number }; pages: Array<{ requestPath: string; pageviews: number; visitors: number }> } | null>(null);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!adminToken) return;
+    const controller = new AbortController();
+    fetch('/api/admin/analytics', {
+      headers: { 'x-admin-token': adminToken },
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(response.status === 503 ? t('analyticsNotConfigured') : t('analyticsLoadFailed'));
+        return response.json();
+      })
+      .then((result) => setAnalytics(result))
+      .catch((error) => {
+        if (!controller.signal.aborted) setAnalyticsError(error.message);
+      });
+    return () => controller.abort();
+  }, [adminToken, t]);
 
   return (
     <section className="grid gap-5">
@@ -77,6 +99,31 @@ export function DashboardPanel({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="rounded-lg border border-[#121212]/10 p-5 dark:border-white/10">
+            <h3 className="font-medium">{t('webAnalytics')}</h3>
+            <p className="mt-1 text-sm text-[#121212]/50 dark:text-white/50">{t('analyticsLast30Days')}</p>
+            {analyticsError ? (
+              <p className="mt-4 text-sm text-red-600">{analyticsError}</p>
+            ) : analytics ? (
+              <>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <DashboardMetricCard label={t('pageviews')} value={analytics.count.pageviews} />
+                  <DashboardMetricCard label={t('visitors')} value={analytics.count.visitors} />
+                </div>
+                <h4 className="mt-6 font-medium">{t('topPages')}</h4>
+                <div className="mt-2 divide-y divide-[#121212]/10 dark:divide-white/10">
+                  {analytics.pages.map((page) => (
+                    <div key={page.requestPath} className="flex justify-between gap-4 py-2 text-sm">
+                      <span className="truncate">{page.requestPath}</span>
+                      <span className="shrink-0">{page.pageviews} {t('pageviews')}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="mt-4 text-sm text-[#121212]/60 dark:text-white/60">{t('loadingAnalytics')}</p>
+            )}
           </div>
         </>
       )}

@@ -37,6 +37,8 @@ AI_MODEL=gpt-4o-mini
 3. 在 Project Settings 的 Environment Variables 中配置上面的变量。
 4. 构建命令使用 `pnpm build`，输出保持 Next.js 默认配置。
 
+若要在 `/admin` 首页直接查看最近 30 天的 Web Analytics 数据，先在 Vercel 项目中启用 Web Analytics，再到 [Account Tokens](https://vercel.com/account/tokens) 创建 Vercel API Access Token（优先选择对应项目的 Scope），创建时复制一次性展示的值。在该项目的 Environment Variables 中将其保存为 `VERCEL_TOKEN`；这是本项目读取密钥的变量名，Vercel 不会自动生成或注入 token。在项目设置中启用 System Environment Variables 后，`VERCEL_PROJECT_ID` 会自动注入；否则手动配置。使用 Full Account 范围的 token 查询团队项目时还需配置 `VERCEL_TEAM_ID`；项目或团队范围的 token 通常可由 Vercel 根据 Scope 识别。不要使用 `NEXT_PUBLIC_` 前缀。未配置或请求失败时后台会显示明确错误，不会显示虚假的零值。
+
 ## 注意点
 
 - 后台写入的是 `GITHUB_BRANCH`。如果 Vercel 生产分支仍是 `main`，文章会写到 `deploy`，但线上站点不会更新。

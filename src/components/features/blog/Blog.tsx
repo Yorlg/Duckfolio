@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +21,7 @@ interface BlogProps {
 export function Blog({ posts }: BlogProps) {
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage === 'en' ? 'en' : 'zh-CN';
+  const reducedMotion = useReducedMotion();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -44,10 +45,21 @@ export function Blog({ posts }: BlogProps) {
   const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 
   return (
-    <div className="flex flex-col justify-center flex-1 py-20">
-      <div className="max-w-3xl mx-auto w-full px-4">
+    <div className="relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
+      <motion.header
+        className="mx-auto mb-16 max-w-4xl px-5 text-center"
+        initial={{ opacity: 1, y: reducedMotion ? 0 : 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+      >
+        <h1 className="text-4xl font-semibold tracking-normal text-[#121212] dark:text-white">{t('nav.blog')}</h1>
+        <p className="mt-3 text-lg italic text-[#121212]/45 dark:text-white/45">{t('blog.description')}</p>
+        <div className="mx-auto mt-10 h-px w-12 bg-[#121212]/15 dark:bg-white/15" />
+      </motion.header>
+      <div className={`w-full px-5 sm:px-8 ${years.length ? 'lg:pl-[260px] lg:pr-8' : 'lg:px-8'}`}>
         <motion.div
-          initial={{ opacity: 1, y: 20 }}
+          className="mx-auto w-full max-w-7xl"
+          initial={{ opacity: 1, y: reducedMotion ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -64,13 +76,13 @@ export function Blog({ posts }: BlogProps) {
               </a>
             </div>
           ) : (
-            <div className="space-y-20 md:space-y-32">
+            <div className="space-y-10">
               {years.map((year, yearIndex) => (
-                <div key={year} className="relative">
-                  <div className="absolute -left-7 md:-left-20 -top-4 md:-top-16 text-[5rem] md:text-[10rem] font-light text-[#121212]/5 md:text-[#121212]/[0.035] dark:text-white/5 md:dark:text-white/[0.035] leading-none select-none pointer-events-none -z-10">
+                <section key={year} className="relative" aria-labelledby={`year-${year}`}>
+                  <h2 id={`year-${year}`} className="pointer-events-none select-none font-condensed text-[clamp(4.25rem,7.6vw,5.8rem)] font-normal leading-[0.86] text-transparent [-webkit-text-stroke:2px_rgba(18,18,18,0.12)] dark:[-webkit-text-stroke:2px_rgba(255,255,255,0.14)]">
                     {year}
-                  </div>
-                  <div className="space-y-5 md:space-y-8 relative pt-4 md:pt-6">
+                  </h2>
+                  <div className="relative mt-1 grid gap-x-10 gap-y-5 pl-4 sm:pl-10 md:mt-2 md:grid-cols-2 xl:pl-20">
                     {postsByYear[year].map((post, index) => {
                       const postDate = new Date(post.date);
                       const formattedDate = isClient
@@ -84,26 +96,27 @@ export function Blog({ posts }: BlogProps) {
                           });
 
                       return (
-                        <Link key={post.slug} href={`/posts/${post.slug}`}>
+                        <Link key={post.slug} href={`/posts/${post.slug}`} className="min-w-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground">
                           <motion.div
-                            initial={{ opacity: 1, y: 20 }}
+                            initial={{ opacity: 1, y: reducedMotion ? 0 : 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{
                               duration: 0.5,
                               delay: yearIndex * 0.2 + index * 0.1,
                               ease: 'easeOut',
                             }}
-                            className="group py-2 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4"
+                            className="group flex h-full min-h-20 flex-col gap-2 rounded-md px-4 py-4 transition-colors hover:bg-[#121212]/5 dark:hover:bg-white/10"
                           >
                             {post.tags && post.tags.length > 0 && (
                               <span className="text-[13px] px-2 py-0.5 rounded-[4px] bg-[#121212]/6 dark:bg-white/6 text-[#121212]/60 dark:text-white/60 shrink-0 w-fit">
                                 {post.tags[0]}
                               </span>
                             )}
-                            <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3 flex-1 min-w-0">
-                              <h3 className="text-lg sm:text-xl font-normal text-[#121212]/90 dark:text-white/90 group-hover:opacity-60 transition-opacity">
+                            <div className="flex min-w-0 flex-1 flex-col gap-2">
+                              <h3 className="break-words text-lg font-medium text-[#121212]/55 transition-colors group-hover:text-[#121212] dark:text-white/55 dark:group-hover:text-white">
                                 {post.title}
                               </h3>
+                              {post.description && <p className="break-words text-sm leading-5 text-[#121212]/30 transition-colors group-hover:text-[#121212]/55 dark:text-white/30 dark:group-hover:text-white/55">{post.description}</p>}
                               <div className="flex items-center gap-2 text-sm text-[#121212]/30 dark:text-white/30 whitespace-nowrap font-light">
                                 <time
                                   dateTime={new Date(post.date).toISOString()}
@@ -123,7 +136,7 @@ export function Blog({ posts }: BlogProps) {
                       );
                     })}
                   </div>
-                </div>
+                </section>
               ))}
             </div>
           )}

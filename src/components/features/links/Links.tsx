@@ -1,65 +1,71 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ExternalLink, ChevronRight } from 'lucide-react';
-import { WebsiteLink } from '@/types/platform-config';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight, Globe2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import type { WebsiteLink } from '@/types/platform-config';
 
-interface LinksProps {
-    websiteLinks: WebsiteLink[]
-}
-
-export function Links({ websiteLinks }: LinksProps) {
+export function Links({ websiteLinks }: { websiteLinks: WebsiteLink[] }) {
   const { t } = useTranslation();
-  return (
-    <div className="mx-auto w-full pt-24 md:pt-32 pb-16">
-      <motion.h2
-        className="text-2xl sm:text-3xl font-bold mb-8 md:mb-12 flex items-center"
-        initial={{ opacity: 1, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-      >
-        <span className="bg-(--theme-primary)/10 dark:bg-(--theme-primary)/20 text-(--theme-primary) dark:text-(--theme-secondary) p-3 rounded-xl mr-4 flex items-center justify-center">
-          <ExternalLink size={24} />
-        </span>
-        {t('links.heading')}
-      </motion.h2>
+  const reducedMotion = useReducedMotion();
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {websiteLinks.map((link, index) => (
-          <motion.a
-            key={link.id}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group block"
-            initial={{ opacity: 1, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-r from-(--theme-primary)/20 to-(--theme-secondary)/20 dark:from-(--theme-primary)/10 dark:to-(--theme-secondary)/10 rounded-2xl transform origin-left group-hover:scale-x-[1.02] transition-transform duration-300" />
-              <div className="relative flex items-center justify-between bg-white dark:bg-[#1a1a1a] rounded-2xl border border-[#121212]/5 dark:border-white/5 p-4 sm:p-6 group-hover:border-(--theme-primary)/30 dark:group-hover:border-(--theme-secondary)/30 transition-colors duration-300">
-                <div className="flex-1">
-                  <h3 className="text-lg sm:text-xl font-medium text-[#121212] dark:text-white group-hover:text-(--theme-primary) dark:group-hover:text-(--theme-secondary) transition-colors duration-300">
-                    {link.title}
-                  </h3>
-                  {link.description && (
-                    <p className="text-sm sm:text-base text-[#121212]/70 dark:text-white/70 mt-2">
-                      {link.description}
-                    </p>
-                  )}
-                </div>
-                <div className="text-[#121212]/40 dark:text-white/40 group-hover:text-(--theme-primary) dark:group-hover:text-(--theme-secondary) transform group-hover:translate-x-1 transition-all duration-300">
-                  <ChevronRight size={24} />
-                </div>
-              </div>
-            </div>
-          </motion.a>
-        ))}
-      </div>
-    </div>
+  return (
+    <section className="relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
+      <motion.header
+        className="mx-auto mb-14 max-w-4xl px-5 text-center"
+        initial={{ opacity: 1, y: reducedMotion ? 0 : 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+      >
+        <h1 className="text-4xl font-semibold text-[#121212] dark:text-white">{t('links.heading')}</h1>
+        <p className="mt-3 text-lg italic text-[#121212]/45 dark:text-white/45">{t('links.description')}</p>
+        <div className="mx-auto mt-10 h-px w-12 bg-[#121212]/15 dark:bg-white/15" />
+      </motion.header>
+
+      <motion.div
+        className="mx-auto w-full max-w-4xl px-5 sm:px-8"
+        initial={{ opacity: 1, y: reducedMotion ? 0 : 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {websiteLinks.length ? (
+          <ul className="grid gap-x-10 gap-y-4 sm:grid-cols-2">
+            {websiteLinks.map((link) => {
+              let domain = '';
+              try {
+                domain = new URL(link.url).hostname.replace(/^www\./, '');
+              } catch {
+                // An incomplete configured URL should not hide the entry.
+              }
+
+              return (
+                <li key={link.id} className="min-w-0">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex min-h-28 min-w-0 gap-4 rounded-md px-2 py-5 transition-colors hover:bg-[#121212]/[0.035] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground dark:hover:bg-white/[0.06] sm:px-3"
+                  >
+                    <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center text-[#121212]/40 dark:text-white/45">
+                      <Globe2 className="size-5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block break-words text-xl font-medium text-[#121212] transition-colors group-hover:text-(--theme-primary) dark:text-white dark:group-hover:text-(--theme-secondary)">
+                        {link.title}
+                      </span>
+                      {link.description && <span className="mt-1 block break-words text-sm leading-6 text-[#121212]/55 dark:text-white/55">{link.description}</span>}
+                      {domain && <span className="mt-3 block truncate font-mono text-xs text-[#121212]/40 dark:text-white/40">{domain}</span>}
+                    </span>
+                    <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-[#121212]/40 transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 dark:text-white/40" />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="py-12 text-center text-sm text-muted-foreground">{t('links.empty')}</p>
+        )}
+      </motion.div>
+    </section>
   );
 }

@@ -1,18 +1,21 @@
 nav:
   profile: Profile
-  links: Links
+  links: Friends
   blog: Blog
   projects: Projects
 profile:
   greeting: "Hello, "
   introduction: "I'm "
 links:
-  heading: My Links
+  heading: Friends
+  description: Interesting people and their little corners of the internet.
+  empty: No friends here yet. New connections are welcome.
 projects:
   heading: Projects
   description: Projects that I created or maintain.
   categories: Project categories
 blog:
+  description: Notes on ideas, discoveries, and everyday life.
   empty: No posts yet
   create: Create your first post →
 post:
@@ -23,6 +26,10 @@ language:
   switch: 切换到中文
 admin:
   dashboard: Dashboard
+  homepageStyle: Homepage style
+  classicHomepageStyle: Classic — large portrait and animated text
+  minimalHomepageStyle: Minimal — text and small portrait
+  homepageStyleHint: Save to apply. GitHub deployments require a redeploy. Classic is the default.
   contentOverviewAndPublishingStatus: Content overview and publishing status.
   loadingOverviewData: Loading overview data...
   totalPosts: Total posts
@@ -32,6 +39,14 @@ admin:
   postCountOverTheLastSixMonths: Post count over the last six months.
   postStatus: Post status
   publicToDraftRatio: Public-to-draft ratio.
+  webAnalytics: Web Analytics
+  analyticsLast30Days: Traffic in the last 30 days
+  analyticsNotConfigured: Set VERCEL_TOKEN (create it in Vercel Account Tokens) and VERCEL_PROJECT_ID.
+  analyticsLoadFailed: Unable to load Vercel Analytics. Check credentials and project access.
+  loadingAnalytics: Loading traffic data...
+  pageviews: Page views
+  visitors: Visitors
+  topPages: Top pages
   public: Public
   draft: Draft
   countPosts: "{{count}} posts"
@@ -118,11 +133,13 @@ admin:
   noProjectGroupsYet: No project groups yet.
   thisGroupHasNoProjectsYet: This group has no projects yet.
   noSocialLinksYet: No social links yet.
-  noWebsiteLinksYet: No website links yet.
+  noWebsiteLinksYet: No friend links yet.
   platform: Platform
   siteNameAvatarAndBio: Site name, avatar, and bio.
   basic: Basic
   basicInformation: Basic information
+  siteConfigurationDescription: Manage your profile, social links, friends, and projects.
+  configSections: Configuration sections
   projectsDescription: Project categories and projects displayed on the Projects page.
   projectGroups: Project groups
   saveConfiguration: Save configuration
@@ -130,8 +147,8 @@ admin:
   groupTitle: Group title
   socialLinksDescription: Social platform links displayed on the home page.
   socialLinks: Social links
-  websiteLinksDisplayedOnTheLinksPage: Website links displayed on the Links page.
-  websiteLinks: Website links
+  websiteLinksDisplayedOnTheLinksPage: Site names, URLs, and descriptions displayed on the Friends page.
+  websiteLinks: Friend links
   failedToUploadSiteImage: Failed to upload site image.
   avatarSavedHint: Avatar replaced; save the configuration to use the new avatar path.
   logoReplaced: Logo replaced.

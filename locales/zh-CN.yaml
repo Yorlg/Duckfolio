@@ -1,18 +1,21 @@
 nav:
   profile: 首页
-  links: 链接
+  links: 友链
   blog: 博客
   projects: 项目
 profile:
   greeting: 你好，
   introduction: "我是 "
 links:
-  heading: 我的链接
+  heading: 友链
+  description: 在互联网的一角，遇见有趣的人与他们的小站。
+  empty: 这里还没有友链，期待新的相遇。
 projects:
   heading: 项目
   description: 我创建或维护的项目。
   categories: 项目分类
 blog:
+  description: 记录想法、探索与日常。
   empty: 暂无博客文章
   create: 创建你的第一篇文章 →
 post:
@@ -23,6 +26,10 @@ language:
   switch: Switch to English
 admin:
   dashboard: 首页
+  homepageStyle: 首页样式
+  classicHomepageStyle: 经典布局 — 大头像与动态文字
+  minimalHomepageStyle: 极简名片 — 左文右图
+  homepageStyleHint: 保存配置后生效；GitHub 部署模式需等待重新部署。未设置时使用经典布局。
   contentOverviewAndPublishingStatus: 内容概览和发布状态。
   loadingOverviewData: 正在读取概览数据...
   totalPosts: 文章总数
@@ -32,6 +39,14 @@ admin:
   postCountOverTheLastSixMonths: 最近 6 个月文章数量。
   postStatus: 文章状态
   publicToDraftRatio: 公开与草稿比例。
+  webAnalytics: 网站访问分析
+  analyticsLast30Days: 最近 30 天的访问数据
+  analyticsNotConfigured: 请配置 VERCEL_TOKEN（从 Vercel Account Tokens 创建）与 VERCEL_PROJECT_ID。
+  analyticsLoadFailed: 无法读取 Vercel 访问数据，请检查凭据和项目权限。
+  loadingAnalytics: 正在读取访问数据...
+  pageviews: 浏览量
+  visitors: 访客数
+  topPages: 热门页面
   public: 公开
   draft: 草稿
   countPosts: "{{count}} 篇"
@@ -118,11 +133,13 @@ admin:
   noProjectGroupsYet: 还没有项目分组。
   thisGroupHasNoProjectsYet: 这个分组还没有项目。
   noSocialLinksYet: 还没有社交链接。
-  noWebsiteLinksYet: 还没有网站链接。
+  noWebsiteLinksYet: 还没有友链。
   platform: 平台
   siteNameAvatarAndBio: 站点名称、头像和简介。
   basic: 基础
   basicInformation: 基础资料
+  siteConfigurationDescription: 管理首页资料、社交入口、友链及项目。
+  configSections: 配置分组
   projectsDescription: Projects 页面展示的项目分类和项目。
   projectGroups: 项目分组
   saveConfiguration: 保存配置
@@ -130,8 +147,8 @@ admin:
   groupTitle: 分组标题
   socialLinksDescription: 首页展示的社交平台入口。
   socialLinks: 社交链接
-  websiteLinksDisplayedOnTheLinksPage: Links 页面展示的网站入口。
-  websiteLinks: 网站链接
+  websiteLinksDisplayedOnTheLinksPage: 友链页面展示的站点名称、地址与简介。
+  websiteLinks: 友链管理
   failedToUploadSiteImage: 站点图片上传失败。
   avatarSavedHint: 头像已替换；请保存配置以使用新头像路径。
   logoReplaced: Logo 已替换。

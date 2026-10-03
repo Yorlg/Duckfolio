@@ -57,6 +57,7 @@ import {
 } from './utils';
 import { useTranslation } from 'react-i18next';
 import { adminMessageKeys } from '@/lib/admin/message-keys';
+import { extractAvatarTheme, validAvatarTheme } from '@/lib/avatar-theme';
 
 const PUBLISH_LIST_REFRESH_DELAY_MS = 1600;
 type MessageType = 'success' | 'error' | 'warning' | 'info';
@@ -522,8 +523,14 @@ export function AdminPanel() {
     setIsSavingConfig(true);
 
     try {
+      const theme = config.profile.avatar
+        ? validAvatarTheme(config.profile.theme, config.profile.avatar)
+          ? config.profile.theme
+          : await extractAvatarTheme(config.profile.avatar)
+        : undefined;
+      const preparedConfig = { ...config, profile: { ...config.profile, theme } };
       const response = await fetch('/api/admin/config', {
-        body: JSON.stringify(config),
+        body: JSON.stringify(preparedConfig),
         headers: {
           'Content-Type': 'application/json',
           'x-admin-token': adminToken,
@@ -537,6 +544,7 @@ export function AdminPanel() {
           repo?: string;
         };
       }>(response, t("failedToSaveConfiguration"));
+      setConfig(preparedConfig);
 
       notify(
         data.result
@@ -697,7 +705,7 @@ export function AdminPanel() {
 
           <div className="min-w-0 flex-1">
           {tab === 'home' ? (
-            <DashboardPanel isLoading={isLoadingPosts} posts={posts} />
+            <DashboardPanel adminToken={adminToken} isLoading={isLoadingPosts} posts={posts} />
           ) : tab === 'post' ? (
             <PostEditorPanel
               editorKey={editorKey}
