@@ -30,6 +30,8 @@ export interface Profile {
   avatar: string;
   name: string;
   bio: string;
+  style?: 'classic' | 'minimal';
+  theme?: { avatar: string; primary: string; secondary: string };
 }
 
 export interface ProfileConfig {

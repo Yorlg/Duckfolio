@@ -2,7 +2,12 @@
   "profile": {
     "name": "Yorlg",
     "bio": "欢迎来到我的个人主页.",
-    "avatar": "/avatar.png"
+    "avatar": "/avatar.png",
+    "theme": {
+      "avatar": "/avatar.png",
+      "primary": "#776546",
+      "secondary": "#dfc99c"
+    }
   },
   "socialLinks": [
     {
