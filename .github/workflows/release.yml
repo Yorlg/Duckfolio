@@ -1,0 +1,45 @@
+name: Publish source release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Verify version and prepare notes
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const version = require('./package.json').version;
+          const tag = process.env.TAG;
+          if (tag !== `v${version}`) throw new Error(`Tag ${tag} does not match package version ${version}`);
+          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+          const heading = `# ${version} (`;
+          const start = changelog.indexOf(heading);
+          if (start < 0 || (start > 0 && changelog[start - 1] !== '\n')) throw new Error(`No changelog entry for ${version}`);
+          const bodyStart = changelog.indexOf('\n', start) + 1;
+          const next = changelog.indexOf('\n# ', bodyStart);
+          const body = changelog.slice(bodyStart, next < 0 ? undefined : next).trim();
+          if (!body) throw new Error(`Empty changelog entry for ${version}`);
+          fs.writeFileSync(`${process.env.RUNNER_TEMP}/release-notes.md`, `${body}\n`);
+          NODE
+          test -s "$RUNNER_TEMP/release-notes.md"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" --verify-tag --title "$TAG" --notes-file "$RUNNER_TEMP/release-notes.md"
