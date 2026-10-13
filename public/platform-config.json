@@ -1,61 +1,62 @@
 {
   "profile": {
-    "name": "Yorlg",
-    "bio": "欢迎来到我的个人主页.",
     "avatar": "/avatar.png",
+    "bio": "欢迎来到我的个人主页.",
+    "name": "Yorlg",
+    "style": "minimal",
     "theme": {
       "avatar": "/avatar.png",
       "primary": "#776546",
       "secondary": "#dfc99c"
     }
   },
+  "projectSections": [
+    {
+      "id": "projects",
+      "projects": [
+        {
+          "description": "基于 xterm.js 开发的 Web SSH 终端。",
+          "icon": "TerminalSquare",
+          "id": "webssh",
+          "title": "WebSSH",
+          "url": "https://github.com/Yorlg/WebSSH"
+        }
+      ],
+      "title": "Projects"
+    }
+  ],
   "socialLinks": [
     {
+      "icon": "Github",
       "id": "github",
       "platform": "GitHub",
-      "url": "https://github.com/Yorlg",
-      "icon": "Github"
+      "url": "https://github.com/Yorlg"
     },
     {
+      "icon": "Mail",
       "id": "email",
       "platform": "Email",
-      "url": "mailto:i@yorlg.net",
-      "icon": "Mail"
+      "url": "mailto:i@yorlg.net"
     },
     {
+      "icon": "Twitter",
       "id": "x",
       "platform": "Twitter",
-      "url": "https://x.com/Yorlg233",
-      "icon": "Twitter"
+      "url": "https://x.com/Yorlg233"
     },
     {
+      "icon": "Send",
       "id": "telegram",
       "platform": "Telegram",
-      "url": "https://t.me/Yorlg233",
-      "icon": "Send"
+      "url": "https://t.me/Yorlg233"
     }
   ],
   "websiteLinks": [
     {
+      "description": "我的小本本",
       "id": "blog",
       "title": "博客",
-      "url": "https://blog.yorlg.it/",
-      "description": "我的小本本"
-    }
-  ],
-  "projectSections": [
-    {
-      "id": "projects",
-      "title": "Projects",
-      "projects": [
-        {
-          "id": "webssh",
-          "title": "WebSSH",
-          "url": "https://github.com/Yorlg/WebSSH",
-          "description": "基于 xterm.js 开发的 Web SSH 终端。",
-          "icon": "TerminalSquare"
-        }
-      ]
+      "url": "https://blog.yorlg.it/"
     }
   ]
 }
