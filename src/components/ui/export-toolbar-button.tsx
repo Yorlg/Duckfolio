@@ -111,7 +111,7 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
     });
 
     const tailwindCss = `<link rel="stylesheet" href="${siteUrl}/tailwind.css">`;
-    const katexCss = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.18/dist/katex.css" integrity="sha384-9PvLvaiSKCPkFKB1ZsEoTjgnJn+O3KvEwtsz37/XrkYft3DTk2gHdYvd9oWgW3tV" crossorigin="anonymous">`;
+    const katexCss = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.css" integrity="sha384-gtZgq+8Xs10c0UCkYn8zS7zh/6gZofDt98n6YnFsQ+3AfIyk0MupSclHb4kKV6D9" crossorigin="anonymous">`;
 
     const html = `<!DOCTYPE html>
     <html lang="en">
