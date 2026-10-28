@@ -4,7 +4,6 @@ import '../styles/globals.css';
 import { getConfig } from '@/lib/config';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { ModeToggle } from '@/components/theme/toggle-theme';
 // import { CustomCursor } from '@/components/interactive/custom-cursor';
 import { RootLayoutClient } from '@/components/layout/RootLayoutClient';
 import { LanguageProvider } from '@/components/layout/LanguageProvider';
@@ -41,7 +40,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ModeToggle />
           {/* <CustomCursor /> */}
           <LanguageProvider translations={getMessages()}>
             <RootLayoutClient>{children}</RootLayoutClient>

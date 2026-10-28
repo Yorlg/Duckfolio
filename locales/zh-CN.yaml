@@ -20,14 +20,15 @@ blog:
   create: 创建你的第一篇文章 →
 post:
   back: 返回
-footer:
-  copyright: 保留所有权利。
 language:
-  switch: Switch to English
+  select: 选择语言
+theme:
+  switchToLight: 切换到浅色模式
+  switchToDark: 切换到深色模式
 admin:
   dashboard: 首页
   homepageStyle: 首页样式
-  classicHomepageStyle: 经典布局 — 大头像与动态文字
+  classicHomepageStyle: 经典布局 — 大头像与个人介绍
   minimalHomepageStyle: 极简名片 — 左文右图
   homepageStyleHint: 保存配置后生效；GitHub 部署模式需等待重新部署。未设置时使用经典布局。
   contentOverviewAndPublishingStatus: 内容概览和发布状态。
@@ -162,6 +163,8 @@ admin:
   noMatchingIconsFound: 没有找到匹配的图标
   enterAdminPassword: 请输入管理员口令。
   enterAdministratorPassphrase: 请输入管理员口令
+  showPassword: 显示密码
+  hidePassword: 隐藏密码
   incorrectAdminPassword: 管理员口令不正确。
   failedToLoadAdminStatus: 后台状态读取失败。
   loadingPublishingTarget: 正在读取发布目标

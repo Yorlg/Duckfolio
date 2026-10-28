@@ -1,32 +1,24 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, Globe2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { WebsiteLink } from '@/types/platform-config';
 
 export function Links({ websiteLinks }: { websiteLinks: WebsiteLink[] }) {
   const { t } = useTranslation();
-  const reducedMotion = useReducedMotion();
 
   return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
-      <motion.header
+    <section className="site-page-enter relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
+      <header
         className="mx-auto mb-14 max-w-4xl px-5 text-center"
-        initial={{ opacity: 1, y: reducedMotion ? 0 : 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: 'easeOut' }}
       >
         <h1 className="text-4xl font-semibold text-[#121212] dark:text-white">{t('links.heading')}</h1>
         <p className="mt-3 text-lg italic text-[#121212]/45 dark:text-white/45">{t('links.description')}</p>
         <div className="mx-auto mt-10 h-px w-12 bg-[#121212]/15 dark:bg-white/15" />
-      </motion.header>
+      </header>
 
-      <motion.div
+      <div
         className="mx-auto w-full max-w-4xl px-5 sm:px-8"
-        initial={{ opacity: 1, y: reducedMotion ? 0 : 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
       >
         {websiteLinks.length ? (
           <ul className="grid gap-x-10 gap-y-4 sm:grid-cols-2">
@@ -56,7 +48,7 @@ export function Links({ websiteLinks }: { websiteLinks: WebsiteLink[] }) {
                       {link.description && <span className="mt-1 block break-words text-sm leading-6 text-[#121212]/55 dark:text-white/55">{link.description}</span>}
                       {domain && <span className="mt-3 block truncate font-mono text-xs text-[#121212]/40 dark:text-white/40">{domain}</span>}
                     </span>
-                    <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-[#121212]/40 transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 dark:text-white/40" />
+                    <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-[#121212]/40 transition-colors group-hover:text-(--theme-primary) dark:text-white/40 dark:group-hover:text-(--theme-secondary)" />
                   </a>
                 </li>
               );
@@ -65,7 +57,7 @@ export function Links({ websiteLinks }: { websiteLinks: WebsiteLink[] }) {
         ) : (
           <p className="py-12 text-center text-sm text-muted-foreground">{t('links.empty')}</p>
         )}
-      </motion.div>
+      </div>
     </section>
   );
 }

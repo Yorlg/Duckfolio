@@ -11,6 +11,8 @@ import {
 import {
   BarChart3,
   ChevronDown,
+  Eye,
+  EyeOff,
   Globe2,
   Home,
   ImageIcon,
@@ -69,6 +71,7 @@ export function AdminPanel() {
   const [unlocked, setUnlocked] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [loginInput, setLoginInput] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<AdminStatus | null>(null);
   const [config, setConfig] = useState<ProfileConfig>(emptyConfig);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -569,7 +572,7 @@ export function AdminPanel() {
 
   if (!unlocked) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-white text-[#121212] dark:bg-black dark:text-white">
+      <main className="flex flex-1 items-center justify-center bg-white text-[#121212] dark:bg-black dark:text-white">
         <Toaster closeButton richColors position="top-center" />
         <div className="mx-auto w-full max-w-sm px-4">
           <div className="flex flex-col items-center gap-6">
@@ -586,18 +589,37 @@ export function AdminPanel() {
               <h1 className="mt-2 text-2xl font-semibold">{t("administratorVerification")}</h1>
             </div>
             <div className="flex w-full flex-col gap-3">
-              <input
-                className="w-full rounded-lg border border-[#121212]/10 bg-transparent px-4 py-3 text-sm outline-none transition-colors focus:border-[#121212]/30 placeholder:text-[#121212]/30 dark:border-white/10 dark:focus:border-white/30 dark:placeholder:text-white/30"
-                placeholder={t("enterAdministratorPassphrase")}
-                type="password"
-                value={loginInput}
-                onChange={(event) => setLoginInput(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    void handleLogin();
-                  }
-                }}
-              />
+              <div className="relative">
+                <input
+                  className="w-full rounded-lg border border-[#121212]/10 bg-transparent px-4 py-3 pr-12 text-sm outline-none transition-colors focus:border-[#121212]/30 placeholder:text-[#121212]/30 dark:border-white/10 dark:focus:border-white/30 dark:placeholder:text-white/30"
+                  placeholder={t("enterAdministratorPassphrase")}
+                  type={showPassword ? 'text' : 'password'}
+                  value={loginInput}
+                  onChange={(event) => setLoginInput(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      void handleLogin();
+                    }
+                  }}
+                />
+                <Button
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-[#121212]/40 hover:text-[#121212] dark:text-white/40 dark:hover:text-white"
+                  size="icon-sm"
+                  variant="ghost"
+                  type="button"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  title={t(showPassword ? "hidePassword" : "showPassword")}
+                >
+                  {showPassword ? (
+                    <EyeOff className="size-4" aria-hidden="true" />
+                  ) : (
+                    <Eye className="size-4" aria-hidden="true" />
+                  )}
+                  <span className="sr-only">
+                    {t(showPassword ? "hidePassword" : "showPassword")}
+                  </span>
+                </Button>
+              </div>
               <Button
                 className="w-full rounded-lg bg-[#121212] py-3 text-sm text-white transition-colors hover:bg-[#121212]/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/80"
                 disabled={isVerifying}
@@ -631,7 +653,7 @@ export function AdminPanel() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-white text-[#121212] dark:bg-black dark:text-white">
+    <main className="flex-1 overflow-x-hidden bg-white text-[#121212] dark:bg-black dark:text-white">
       <Toaster closeButton richColors position="top-center" />
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-16 pt-6 md:px-8 md:pt-8">
         <header className="flex flex-col gap-4 border-b border-[#121212]/10 pb-6 dark:border-white/10 md:flex-row md:items-end md:justify-between">

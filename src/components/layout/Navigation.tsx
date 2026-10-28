@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,10 +13,9 @@ const navItems = [
   { name: 'projects', href: '/projects' },
 ];
 
-export function Navigation() {
+export function Navigation({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { t } = useTranslation();
-  const reducedMotion = useReducedMotion();
 
   const getActiveSection = () => {
     if (pathname === '/') return 'profile';
@@ -30,43 +29,20 @@ export function Navigation() {
   const activeSection = getActiveSection();
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-40 p-4 sm:px-8  sm:py-6 flex justify-between items-center">
-      <motion.div
-        initial={{ opacity: 1, x: reducedMotion ? 0 : -20 }}
-        animate={{
-          opacity: 1,
-          x: 0,
-          rotate: reducedMotion ? 0 : [0, -10, 0],
-        }}
-        transition={{
-          duration: 0.6,
-          ease: 'easeOut',
-          rotate: {
-            duration: 2,
-            ease: 'easeInOut',
-            repeat: reducedMotion ? 0 : Infinity,
-            repeatType: 'loop',
-          },
-        }}
-        className="text-xl font-medium"
-      >
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-1 sm:gap-x-6">
+      <div className="text-xl font-medium">
         <Link href="/">
           <Image src="/logo.png" alt="Logo" width={40} height={40} priority />
         </Link>
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="flex space-x-4 sm:space-x-7"
-        initial={{ opacity: 1, y: reducedMotion ? 0 : -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-      >
+      <nav className="order-last col-span-3 flex min-w-0 items-center justify-center gap-6 sm:order-none sm:col-span-1 sm:justify-end sm:gap-7">
         {navItems.map((item) => (
           <Link
             key={item.name}
             href={item.href}
             aria-current={activeSection === item.name ? 'page' : undefined}
-            className={`text-[15px] font-medium tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground ${
+            className={`relative inline-flex h-8 shrink-0 items-center whitespace-nowrap text-sm font-medium tracking-wide transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground sm:h-11 sm:text-[15px] ${
               activeSection === item.name
                 ? 'text-[#121212] dark:text-white'
                 : 'text-[#121212]/60 dark:text-white/60 hover:text-[#121212] dark:hover:text-white'
@@ -74,16 +50,15 @@ export function Navigation() {
           >
             {t('nav.' + item.name)}
             {activeSection === item.name && (
-              <motion.div
+              <span
                 aria-hidden="true"
-                className="mt-1 h-0.5 bg-[#121212] dark:bg-white"
-                layoutId="activeSection"
-                transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 30 }}
+                className="absolute inset-x-0 bottom-0.5 h-0.5 bg-[#121212] dark:bg-white sm:bottom-1"
               />
             )}
           </Link>
         ))}
-      </motion.div>
-    </nav>
+      </nav>
+      <div className="col-start-3">{children}</div>
+    </div>
   );
 }

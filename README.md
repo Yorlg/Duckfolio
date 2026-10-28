@@ -13,7 +13,7 @@
 - 🚀 使用 **Next.js 16 + Turbopack**，极速开发体验
 - 🎨 采用 **Tailwind CSS 4** 实现原子化、响应式布局
 - 🌗 支持 **深色/浅色主题自动切换**
-- 💫 利用 **Framer Motion** 增添自然平滑的过渡动画
+- 统一的短淡入与社交图标描边，支持系统减少动态效果设置
 - 🧩 使用 **Shadcn UI** 构建现代交互组件
 - 🧠 通过 **Zustand** 管理全局状态（如个人资料）
 - 📱 完全响应式，适配移动端和大屏设备
@@ -39,7 +39,7 @@
 | [Turbopack](https://turbo.build/pack)                     | 构建工具     |
 | [Tailwind CSS](https://tailwindcss.com/)                  | 样式框架     |
 | [Shadcn UI](https://ui.shadcn.com/ )                      | 无障碍组件库 |
-| [Framer Motion](https://www.framer.com/motion/)           | 动画库       |
+| [Framer Motion](https://www.framer.com/motion/)           | 拖拽交互反馈 |
 | [Zustand](https://github.com/pmndrs/zustand)              | 状态管理     |
 | [next-themes](https://github.com/pacocoursey/next-themes) | 主题切换     |
 | [Lucide Icons](https://lucide.dev/)                       | 图标         |

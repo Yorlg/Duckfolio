@@ -23,9 +23,9 @@ export function WebsiteLinks() {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block transition-all hover:translate-y-[-2px] hover:shadow-md"
+          className="group block"
         >
-          <Card className="border border-border bg-card text-card-foreground">
+          <Card className="border border-border bg-card text-card-foreground transition-colors group-hover:border-foreground/30 group-focus-visible:border-foreground/30">
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>{link.title}</CardTitle>

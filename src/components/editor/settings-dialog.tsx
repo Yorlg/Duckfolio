@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 
-import { motion } from 'framer-motion';
 import { CopilotPlugin } from '@platejs/ai/react';
 import {
   Check,
@@ -498,24 +497,19 @@ export function SettingsDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <motion.div
-        className="fixed bottom-40 right-4 z-50"
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-      >
-        <DialogTrigger asChild>
-          <Button
-            aria-label={t("settings")}
-            className="rounded-full backdrop-blur-sm shadow-lg hover:shadow-primary/20 hover:border-primary/40 hover:scale-105 transition-all duration-300 ease-in-out"
-            size="icon"
-            variant="outline"
-          >
-            <Settings className="size-[1.2rem]  text-primary" />
-          </Button>
-        </DialogTrigger>
-      </motion.div>
-      <DialogContent>
+      <DialogTrigger asChild>
+        <Button
+          type="button"
+          data-editor-settings-trigger
+          aria-label={t("settings")}
+          title={t("settings")}
+          size="icon"
+          variant="ghost"
+        >
+          <Settings className="size-[1.2rem]" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain">
         <DialogHeader>
           <DialogTitle className="text-xl">{t("settings")}</DialogTitle>
           <DialogDescription>{t("configureAIAPIKeysAndPreferences")}</DialogDescription>

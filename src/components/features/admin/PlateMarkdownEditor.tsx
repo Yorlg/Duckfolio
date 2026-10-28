@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { deserializeMd, serializeMd } from '@platejs/markdown';
-import { motion } from 'framer-motion';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import type { Value } from 'platejs';
 import { Plate, usePlateEditor } from 'platejs/react';
@@ -84,9 +83,11 @@ export function PlateMarkdownEditor({
   return (
     <TooltipProvider>
       <div
+        data-writing-editor
+        data-fullscreen={isFullscreen}
         className={cn(
-          'overflow-hidden rounded-lg border border-[#121212]/10 bg-white text-[#121212] dark:border-white/10 dark:bg-[#101010] dark:text-white',
-          isFullscreen && 'fixed inset-0 z-40 rounded-none border-0',
+          'flex h-[72vh] min-h-0 flex-col overflow-hidden rounded-lg border border-[#121212]/10 bg-white text-[#121212] dark:border-white/10 dark:bg-[#101010] dark:text-white',
+          isFullscreen && 'fixed inset-0 z-[45] h-dvh rounded-none border-0',
         )}
       >
         <Plate
@@ -95,8 +96,37 @@ export function PlateMarkdownEditor({
             onMarkdownChange(safeSerializeEditor(editor, markdown));
           }}
         >
+          <div
+            data-editor-actions
+            className="flex shrink-0 items-center justify-end gap-1 border-b border-border px-2 py-1"
+          >
+            <SettingsDialog />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  data-editor-fullscreen-toggle
+                  aria-label={isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
+                  aria-pressed={isFullscreen}
+                  title={isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setIsFullscreen((current) => !current)}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="size-[1.2rem]" />
+                  ) : (
+                    <Maximize2 className="size-[1.2rem]" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                {isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
+              </TooltipContent>
+            </Tooltip>
+          </div>
           <EditorContainer
-            className={isFullscreen ? 'h-screen' : 'h-[72vh]'}
+            className="h-auto min-h-0 flex-1 overscroll-contain"
             variant="default"
           >
             <Editor
@@ -105,38 +135,8 @@ export function PlateMarkdownEditor({
               variant="demo"
             />
           </EditorContainer>
-
-          <SettingsDialog />
         </Plate>
       </div>
-
-      <motion.div
-        className="fixed bottom-28 right-4 z-50"
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-      >
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              aria-label={isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
-              className="rounded-full backdrop-blur-sm shadow-lg hover:shadow-primary/20 hover:border-primary/40 hover:scale-105 transition-all duration-300 ease-in-out"
-              size="icon"
-              variant="outline"
-              onClick={() => setIsFullscreen((current) => !current)}
-            >
-              {isFullscreen ? (
-                <Minimize2 className="size-[1.2rem]  text-primary" />
-              ) : (
-                <Maximize2 className="size-[1.2rem]  text-primary" />
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            {isFullscreen ? t("exitFullscreenWriting") : t("fullscreenWriting")}
-          </TooltipContent>
-        </Tooltip>
-      </motion.div>
     </TooltipProvider>
   );
 }

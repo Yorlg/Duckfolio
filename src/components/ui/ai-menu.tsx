@@ -668,7 +668,7 @@ export function AILoadingBar() {
     return (
       <div
         className={cn(
-          '-translate-x-1/2 fixed top-4 left-1/2 z-60 flex items-center gap-3 rounded-lg border border-border bg-background/95 px-4 py-2 text-foreground text-sm shadow-lg backdrop-blur-md transition-all duration-300'
+          '-translate-x-1/2 fixed top-4 left-1/2 z-60 flex items-center gap-3 rounded-lg border border-border bg-background/95 px-4 py-2 text-foreground text-sm shadow-lg backdrop-blur-md transition-colors duration-150'
         )}
       >
         <span className="size-4  animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />

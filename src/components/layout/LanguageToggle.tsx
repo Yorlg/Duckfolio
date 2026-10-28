@@ -1,8 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useTranslation } from 'react-i18next';
 
 export function LanguageToggle() {
@@ -11,23 +15,32 @@ export function LanguageToggle() {
   const isChinese = language === 'zh-CN';
 
   return (
-    <motion.div
-      className="fixed bottom-16 right-4 z-50"
-      initial={{ y: 100, opacity: 1 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-    >
-      <Button
-        aria-label={t('language.switch')}
-        className="rounded-full bg-white/80 backdrop-blur-sm shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:border-primary/40 hover:shadow-primary/20 dark:bg-black/80"
-        size="icon"
-        title={t('language.switch')}
-        type="button"
-        variant="outline"
-        onClick={() => void i18n.changeLanguage(isChinese ? 'en' : 'zh-CN')}
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <Button
+          aria-label={`${t('language.select')} · ${isChinese ? '中文' : 'EN'}`}
+          className="h-11 min-w-11 rounded-lg px-2 text-[15px] font-semibold text-[#121212]/65 transition-colors duration-150 hover:text-[#121212] dark:text-white/65 dark:hover:text-white"
+          title={t('language.select')}
+          type="button"
+          variant="ghost"
+        >
+          {isChinese ? '中文' : 'EN'}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="center"
+        sideOffset={4}
+        collisionPadding={12}
+        className="min-w-16 rounded-md border-[#121212]/10 bg-background p-0.5 shadow-sm dark:border-white/10"
       >
-        <Languages aria-hidden="true" className="size-[1.2rem] text-primary" />
-      </Button>
-    </motion.div>
+        <DropdownMenuItem
+          className="h-8 cursor-pointer justify-center rounded-sm px-3 py-0 text-sm font-medium text-[#121212]/65 focus:bg-[#121212]/[0.035] dark:text-white/65 dark:focus:bg-white/5"
+          lang={isChinese ? 'en' : 'zh-CN'}
+          onSelect={() => void i18n.changeLanguage(isChinese ? 'en' : 'zh-CN')}
+        >
+          {isChinese ? 'EN' : '中文'}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
