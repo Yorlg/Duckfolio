@@ -34,7 +34,7 @@ export default async function NotFound() {
   const { htmlContent } = await get404Content();
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1 min-h-screen">
+    <div className="site-page-enter flex flex-col items-center justify-center flex-1 min-h-screen">
       <div className="text-center space-y-8">
         <div
           className="text-6xl font-light text-[#121212] dark:text-white"

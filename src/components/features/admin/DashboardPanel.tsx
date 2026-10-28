@@ -180,7 +180,7 @@ function createMonthlyChartOption(
   t: (source: string, params?: Record<string, string | number>) => string,
 ): EChartsOption {
   return {
-    animationDuration: 700,
+    animation: false,
     color: ['#121212'],
     grid: {
       bottom: 24,
@@ -226,7 +226,7 @@ function createStatusChartOption(
   const total = publicPosts + draftPosts;
 
   return {
-    animationDuration: 700,
+    animation: false,
     legend: {
       top: '5%',
       left: 'center',

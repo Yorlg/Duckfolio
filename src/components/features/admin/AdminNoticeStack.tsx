@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
-import { motion, type PanInfo } from 'framer-motion';
+import { motion, useReducedMotion, type PanInfo } from 'framer-motion';
 import { AdminNotice } from './AdminShared';
 
 export function AdminNoticeStack({ notices }: { notices: ReactNode[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (activeIndex >= notices.length) {
@@ -45,6 +46,7 @@ export function AdminNoticeStack({ notices }: { notices: ReactNode[] }) {
     <div className="relative h-20 px-1 pt-1">
       {orderedNotices.map((notice, index) => (
         <motion.div
+          initial={false}
           animate={{
             opacity: index === 0 ? 1 : 0.72 - index * 0.12,
             scale: 1 - index * 0.025,
@@ -57,8 +59,8 @@ export function AdminNoticeStack({ notices }: { notices: ReactNode[] }) {
           dragMomentum={false}
           key={`${activeIndex}-${index}`}
           style={{ zIndex: notices.length - index }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          whileDrag={{ scale: 1.015, zIndex: notices.length + 1 }}
+          transition={{ duration: reducedMotion ? 0 : 0.15, ease: 'easeOut' }}
+          whileDrag={{ zIndex: notices.length + 1 }}
           onDragEnd={index === 0 ? handleDragEnd : undefined}
         >
           <AdminNotice>{notice}</AdminNotice>

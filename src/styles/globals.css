@@ -31,38 +31,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-@layer utilities {
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-float-slow {
-    animation: float 15s ease-in-out infinite;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes float {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-}
 
 @layer base {
   :root {
@@ -130,42 +98,6 @@
   @apply bg-(--theme-primary)/20 text-(--theme-primary);
 }
 
-/* 用于主题切换 */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.4s;
-}
-
-::view-transition-old(root) {
-  animation: none;
-}
-
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-.dark::view-transition-old(root) {
-  z-index: 1;
-}
-
-.dark::view-transition-new(root) {
-  z-index: 999;
-}
-
-:root:not(.dark)::view-transition-old(root) {
-  z-index: 999;
-}
-
-:root:not(.dark)::view-transition-new(root) {
-  z-index: 1;
-}
-
-/* 在主题切换期间优化动画性能 */
-.theme-transitioning * {
-  animation-play-state: paused !important;
-  transition: none !important;
-}
 
 /* 自定义光标样式 */
 .custom-cursor,
@@ -214,6 +146,84 @@
   .custom-cursor,
   .custom-cursor * {
     cursor: auto !important;
+  }
+}
+
+@keyframes site-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes site-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-header-content,
+  .site-page-enter {
+    animation: site-fade-in 240ms ease-out;
+  }
+
+  .ui-fade:is([data-state='open'], [data-state='delayed-open'], [data-state='instant-open']) {
+    animation: site-fade-in 150ms ease-out;
+  }
+
+  .ui-fade[data-state='closed'] {
+    animation: site-fade-out 150ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes profile-social-stroke-entry {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes profile-social-stroke-replay {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.profile-social-link [data-profile-social-stroke] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .profile-social-link [data-profile-social-stroke-entry] {
+    stroke-dashoffset: 1;
+    animation: profile-social-stroke-entry 800ms cubic-bezier(0.22, 1, 0.36, 1) var(--profile-social-stroke-delay, 0ms) forwards;
+  }
+
+  .profile-social-link:is(:hover, :focus-visible) [data-profile-social-stroke] {
+    animation: profile-social-stroke-replay 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 }
 

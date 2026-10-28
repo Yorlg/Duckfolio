@@ -12,8 +12,8 @@ export interface Messages {
   projects: { heading: string; description: string; categories: string };
   blog: { empty: string; create: string };
   post: { back: string };
-  footer: { copyright: string };
-  language: { switch: string };
+  language: { select: string };
+  theme: { switchToLight: string; switchToDark: string };
 }
 
 export function getMessages(): { 'zh-CN': Messages; en: Messages } {

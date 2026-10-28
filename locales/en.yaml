@@ -20,14 +20,15 @@ blog:
   create: Create your first post →
 post:
   back: Back
-footer:
-  copyright: All rights reserved.
 language:
-  switch: 切换到中文
+  select: Select language
+theme:
+  switchToLight: Switch to light mode
+  switchToDark: Switch to dark mode
 admin:
   dashboard: Dashboard
   homepageStyle: Homepage style
-  classicHomepageStyle: Classic — large portrait and animated text
+  classicHomepageStyle: Classic — large portrait and introduction
   minimalHomepageStyle: Minimal — text and small portrait
   homepageStyleHint: Save to apply. GitHub deployments require a redeploy. Classic is the default.
   contentOverviewAndPublishingStatus: Content overview and publishing status.
@@ -162,6 +163,8 @@ admin:
   noMatchingIconsFound: No matching icons found.
   enterAdminPassword: Please enter the administrator passphrase.
   enterAdministratorPassphrase: Enter administrator passphrase
+  showPassword: Show password
+  hidePassword: Hide password
   incorrectAdminPassword: The administrator passphrase is incorrect.
   failedToLoadAdminStatus: Failed to load admin status.
   loadingPublishingTarget: Loading publishing target

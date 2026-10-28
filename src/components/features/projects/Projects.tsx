@@ -1,10 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { TerminalSquare } from 'lucide-react';
 import { ConfigIcon } from '@/lib/icon-registry';
 import { useTranslation } from 'react-i18next';
-import type { ProjectLink, ProjectSection } from '@/types/platform-config';
+import type { ProjectSection } from '@/types/platform-config';
 
 function getSectionId(title: string) {
   return title
@@ -24,12 +23,9 @@ export function Projects({
   );
 
   return (
-    <div className="relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
-      <motion.header
+    <div className="site-page-enter relative left-1/2 w-screen -translate-x-1/2 pb-24 pt-28">
+      <header
         className="mx-auto mb-16 max-w-4xl text-center"
-        initial={{ opacity: 1, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: 'easeOut' }}
       >
         <h1 className="text-4xl font-semibold tracking-normal text-[#121212] dark:text-white">
           {t('projects.heading')}
@@ -38,7 +34,7 @@ export function Projects({
           {t('projects.description')}
         </p>
         <div className="mx-auto mt-10 h-px w-12 bg-[#121212]/15 dark:bg-white/15" />
-      </motion.header>
+      </header>
 
       <div className="grid w-full gap-10 px-5 sm:px-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start lg:px-0">
         <aside className="group sticky top-24 hidden h-fit pl-8 lg:block">
@@ -54,7 +50,7 @@ export function Projects({
                 <span className="h-px w-2.5 bg-current" />
               </span>
             </button>
-            <nav className="grid translate-x-[-4px] gap-2 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-focus-within:translate-x-0 group-focus-within:opacity-100">
+            <nav className="grid gap-2 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none">
               {visibleSections.map((section) => (
                 <a
                   key={section.title}
@@ -69,18 +65,11 @@ export function Projects({
         </aside>
 
         <main className="mx-auto grid w-full max-w-7xl gap-10 lg:pr-8">
-          {visibleSections.map((section, sectionIndex) => (
-            <motion.section
+          {visibleSections.map((section) => (
+            <section
               key={section.title}
               id={getSectionId(section.title)}
               className="relative scroll-mt-28"
-              initial={{ opacity: 1, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.08 * sectionIndex,
-                ease: 'easeOut',
-              }}
             >
               <h2 className="pointer-events-none select-none font-condensed text-[clamp(4.25rem,7.6vw,5.8rem)] font-normal leading-[0.86] text-transparent [-webkit-text-stroke:2px_rgba(18,18,18,0.12)] dark:[-webkit-text-stroke:2px_rgba(255,255,255,0.14)]">
                 {section.title}
@@ -116,7 +105,7 @@ export function Projects({
                   );
                 })}
               </div>
-            </motion.section>
+            </section>
           ))}
         </main>
       </div>

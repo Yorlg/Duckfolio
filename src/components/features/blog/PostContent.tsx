@@ -17,7 +17,7 @@ export function PostContent({ post, contentHtml }: { post: BlogPost; contentHtml
     : '';
 
   return (
-    <article className="mx-auto w-full max-w-3xl px-4 pb-20 pt-24 md:pt-32">
+    <article className="site-page-enter mx-auto w-full max-w-3xl px-4 pb-20 pt-24 md:pt-32">
       <Link
         href="/posts"
         className="mb-10 inline-flex items-center gap-2 text-sm text-[#121212]/50 transition-colors hover:text-[#121212] dark:text-white/50 dark:hover:text-white"
