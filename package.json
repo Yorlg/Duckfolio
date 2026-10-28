@@ -1,6 +1,6 @@
 {
   "name": "duck-folio",
-  "version": "2.4.37",
+  "version": "2.4.38",
   "private": true,
   "packageManager": "pnpm@12.15.0",
   "scripts": {
