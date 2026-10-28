@@ -29,12 +29,9 @@ overrides:
   undici@>=6.0.0 <6.28.1: 6.28.1
 
 allowBuilds:
-  esbuild: set this to true or false
   msgpackr-extract: true
   sharp: true
   unrs-resolver: true
-  workerd: set this to true or false
-
 allowedDeprecatedVersions:
   abab: '*'
   are-we-there-yet: '*'
@@ -56,6 +53,3 @@ onlyBuiltDependencies:
   - sharp
   - unrs-resolver
   - workerd
-
-patchedDependencies:
-  braces@3.0.3: patches/braces@3.0.3.patch
