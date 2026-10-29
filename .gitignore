@@ -47,3 +47,7 @@ yarn-error.log*
 
 # Local Codex dev server logs
 .codex-next-dev.*
+
+# 部署分支保留照片内容，覆盖开发分支的目录忽略规则
+!/photos/
+!/photos/**
