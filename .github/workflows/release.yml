@@ -62,13 +62,18 @@ jobs:
               if (error.status !== 404) throw error;
             }
 
+            let tagExists = true;
             try {
-              const { data } = await github.rest.repos.getCommit({ ...repo, ref: `tags/${tag}` });
+              await github.rest.git.getRef({ ...repo, ref: `tags/${tag}` });
+            } catch (error) {
+              if (error.status !== 404 || isTagPush) throw error;
+              tagExists = false;
+            }
+            if (tagExists) {
+              const { data } = await github.rest.repos.getCommit({ ...repo, ref: `refs/tags/${tag}` });
               if (data.sha !== context.sha) {
                 throw new Error(`Existing tag ${tag} points to ${data.sha}, not ${context.sha}`);
               }
-            } catch (error) {
-              if (error.status !== 404 || isTagPush) throw error;
             }
 
             const { data } = await github.rest.repos.createRelease({
