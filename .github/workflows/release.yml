@@ -2,44 +2,82 @@ name: Publish source release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*.*.*'
 
 permissions:
   contents: write
 
+concurrency:
+  group: source-release
+  cancel-in-progress: false
+  queue: max
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out tagged source
+      - name: Check out release source
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: Verify version and prepare notes
-        env:
-          TAG: ${{ github.ref_name }}
-        run: |
-          node <<'NODE'
-          const fs = require('node:fs');
-          const version = require('./package.json').version;
-          const tag = process.env.TAG;
-          if (tag !== `v${version}`) throw new Error(`Tag ${tag} does not match package version ${version}`);
-          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
-          const heading = `# ${version} (`;
-          const start = changelog.indexOf(heading);
-          if (start < 0 || (start > 0 && changelog[start - 1] !== '\n')) throw new Error(`No changelog entry for ${version}`);
-          const bodyStart = changelog.indexOf('\n', start) + 1;
-          const next = changelog.indexOf('\n# ', bodyStart);
-          const body = changelog.slice(bodyStart, next < 0 ? undefined : next).trim();
-          if (!body) throw new Error(`Empty changelog entry for ${version}`);
-          fs.writeFileSync(`${process.env.RUNNER_TEMP}/release-notes.md`, `${body}\n`);
-          NODE
-          test -s "$RUNNER_TEMP/release-notes.md"
+      - name: Verify version and publish GitHub Release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const { version } = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version)) {
+              throw new Error(`Invalid release version: ${version}`);
+            }
+            const tag = `v${version}`;
+            const isTagPush = context.ref.startsWith('refs/tags/');
+            if (isTagPush && context.ref !== `refs/tags/${tag}`) {
+              throw new Error(`Tag ${context.ref} does not match package version ${version}`);
+            }
 
-      - name: Publish GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
-        run: gh release create "$TAG" --verify-tag --title "$TAG" --notes-file "$RUNNER_TEMP/release-notes.md"
+            const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+            const heading = new RegExp(`^# ${version.replace(/\./g, '\\.')} \\((\\d{4}-\\d{2}-\\d{2})\\)\\r?$`, 'gm');
+            const entries = [...changelog.matchAll(heading)];
+            if (entries.length !== 1) throw new Error(`Expected one dated changelog entry for ${version}`);
+            const entry = entries[0];
+            const date = new Date(`${entry[1]}T00:00:00Z`);
+            if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== entry[1]) {
+              throw new Error(`Invalid changelog date: ${entry[1]}`);
+            }
+            const bodyStart = entry.index + entry[0].length;
+            const next = changelog.indexOf('\n# ', bodyStart);
+            const body = changelog.slice(bodyStart, next < 0 ? undefined : next).trim();
+            if (!body) throw new Error(`Empty changelog entry for ${version}`);
+
+            const repo = context.repo;
+            try {
+              await github.rest.repos.getReleaseByTag({ ...repo, tag });
+              core.info(`${tag} already has a release; leaving it unchanged.`);
+              return;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            try {
+              const { data } = await github.rest.repos.getCommit({ ...repo, ref: `tags/${tag}` });
+              if (data.sha !== context.sha) {
+                throw new Error(`Existing tag ${tag} points to ${data.sha}, not ${context.sha}`);
+              }
+            } catch (error) {
+              if (error.status !== 404 || isTagPush) throw error;
+            }
+
+            const { data } = await github.rest.repos.createRelease({
+              ...repo,
+              tag_name: tag,
+              target_commitish: context.sha,
+              name: tag,
+              body,
+              draft: false,
+              prerelease: false,
+            });
+            core.info(`Published ${data.html_url}`);

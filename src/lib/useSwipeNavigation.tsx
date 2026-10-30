@@ -3,13 +3,14 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
-type SectionType = 'profile' | 'links' | 'blog' | 'projects';
+type SectionType = 'profile' | 'links' | 'blog' | 'projects' | 'photos';
 
 const pathToSection: Record<string, SectionType> = {
   '/': 'profile',
   '/links': 'links',
   '/posts': 'blog',
   '/projects': 'projects',
+  '/photos': 'photos',
 };
 
 /** 检查元素或其祖先是否可水平滚动 */
@@ -67,8 +68,10 @@ export function useSwipeNavigation() {
         if (section === 'profile') router.push('/links');
         else if (section === 'links') router.push('/posts');
         else if (section === 'blog') router.push('/projects');
+        else if (section === 'projects') router.push('/photos');
       } else {
-        if (section === 'projects') router.push('/posts');
+        if (section === 'photos') router.push('/projects');
+        else if (section === 'projects') router.push('/posts');
         else if (section === 'blog') router.push('/links');
         else if (section === 'links') router.push('/');
       }
@@ -77,9 +80,14 @@ export function useSwipeNavigation() {
   );
 
   useEffect(() => {
-    if (!isMobile || isBlogPost) return;
+    if (!isMobile || isBlogPost || !pathToSection[pathname]) return;
 
     const handleTouchStart = (e: TouchEvent) => {
+      const target = e.target instanceof Element ? e.target : null;
+      if (e.touches.length !== 1 || target?.closest('[data-no-swipe-navigation]')) {
+        touchRef.current = null;
+        return;
+      }
       const touch = e.touches[0];
       touchRef.current = {
         startX: touch.clientX,
@@ -125,7 +133,7 @@ export function useSwipeNavigation() {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isMobile, isBlogPost, navigate]);
+  }, [isMobile, isBlogPost, navigate, pathname]);
 
   return {
     activeSection,

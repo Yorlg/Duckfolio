@@ -6,10 +6,11 @@ import { parse } from 'yaml';
 
 export interface Messages {
   admin: Record<string, string>;
-  nav: { profile: string; links: string; blog: string; projects: string };
+  nav: { profile: string; links: string; blog: string; projects: string; photos: string };
   profile: { greeting: string; introduction: string };
   links: { heading: string };
   projects: { heading: string; description: string; categories: string };
+  photos: Record<string, string>;
   blog: { empty: string; create: string };
   post: { back: string };
   language: { select: string };

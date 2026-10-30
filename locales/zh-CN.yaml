@@ -3,6 +3,7 @@ nav:
   links: 友链
   blog: 博客
   projects: 项目
+  photos: 照片
 profile:
   greeting: 你好，
   introduction: "我是 "
@@ -14,6 +15,19 @@ projects:
   heading: 项目
   description: 我创建或维护的项目。
   categories: 项目分类
+photos:
+  heading: 照片
+  showOriginal: 显示原始比例
+  showSquare: 显示方形网格
+  openPhoto: "放大照片：{{name}}"
+  photoNumber: "第 {{number}} 张照片"
+  position: "第 {{current}} 张，共 {{total}} 张"
+  close: 关闭照片
+  previous: 上一张
+  next: 下一张
+  empty: 还没有照片，期待更多值得记录的瞬间。
+  loadError: 照片加载失败
+  loadMore: 加载更多照片
 blog:
   description: 记录想法、探索与日常。
   empty: 暂无博客文章
@@ -26,6 +40,39 @@ theme:
   switchToLight: 切换到浅色模式
   switchToDark: 切换到深色模式
 admin:
+  photoManagement: 照片管理
+  viewPhotoGallery: 查看相册
+  savePhotos: 保存相册
+  photoSaveHint: 上传后加入相册；描述、顺序和隐藏状态修改后需保存。隐藏照片会保留原文件，GitHub 模式需等待部署完成。
+  uploadPhotos: 上传照片
+  uploadingPhotos: "正在上传 {{current}} / {{total}}"
+  chooseFromMediaLibrary: 从媒体库选择
+  selectPhotosFromLibrary: 点击照片复制到相册，媒体库中的原文件会保留。
+  addPhotoToGallery: "加入相册：{{name}}"
+  noGalleryPhotos: 上传照片或从媒体库选择，开始记录你的瞬间。
+  photoDescription: 照片描述
+  photoDescriptionPlaceholder: 为这个瞬间写一句话…
+  movePhotoEarlier: 向前移动
+  movePhotoLater: 向后移动
+  hidePhoto: 隐藏照片
+  showPhoto: 显示照片
+  photoHidden: 已隐藏，保存后不会在公开相册显示
+  photosUploaded: "已添加 {{count}} 张照片；GitHub 模式需等待部署完成。"
+  photosSaved: 相册已保存。
+  photosSavedGitHub: 相册已保存到仓库，请等待部署完成。
+  failedToLoadPhotos: 照片列表读取失败。
+  failedToSavePhotos: 相册保存失败。
+  retryLoadPhotos: 重新加载
+  photoOperationFailed: 照片操作失败。
+  photoMetadataInvalid: 照片的 JSON 描述文件格式不正确，请修正后重新加载。
+  photoDirectoryTooLarge: 照片目录过大，请按年份拆分为子目录。
+  invalidPhotoPath: 照片路径无效。
+  invalidPhotoTimestamp: 照片时间格式无效，请重新选择图片上传。
+  invalidPhotoList: 照片列表格式无效。
+  photoNotFound: 照片已不存在，请重新加载相册。
+  photoReadFailed: 照片读取失败。
+  photoUnsupportedType: "{{name}}：请使用 JPG、PNG、WebP、AVIF 或 GIF 图片。"
+  photoTooLarge: "{{name}}：照片大小不能超过 50 MB。"
   dashboard: 首页
   homepageStyle: 首页样式
   classicHomepageStyle: 经典布局 — 大头像与个人介绍

@@ -11,6 +11,7 @@ const navItems = [
   { name: 'links', href: '/links' },
   { name: 'blog', href: '/posts' },
   { name: 'projects', href: '/projects' },
+  { name: 'photos', href: '/photos' },
 ];
 
 export function Navigation({ children }: { children: ReactNode }) {
@@ -23,6 +24,7 @@ export function Navigation({ children }: { children: ReactNode }) {
     if (pathname.startsWith('/posts') || pathname.startsWith('/blog'))
       return 'blog';
     if (pathname.startsWith('/projects')) return 'projects';
+    if (pathname.startsWith('/photos')) return 'photos';
     return 'profile';
   };
 
@@ -36,7 +38,7 @@ export function Navigation({ children }: { children: ReactNode }) {
         </Link>
       </div>
 
-      <nav className="order-last col-span-3 flex min-w-0 items-center justify-center gap-6 sm:order-none sm:col-span-1 sm:justify-end sm:gap-7">
+      <nav className="order-last col-span-3 flex min-w-0 items-center justify-center gap-6 sm:order-0 sm:col-span-1 sm:justify-end sm:gap-7">
         {navItems.map((item) => (
           <Link
             key={item.name}
