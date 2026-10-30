@@ -87,7 +87,7 @@ const allowedLocalFiles = new Set([
 const mediaPathPattern =
   /^content\/media\/(photos|videos|audio|files)\/\d{4}\/[a-z0-9][a-z0-9.-]*\.[a-z0-9]+$/;
 
-function getRepositoryTarget(): RepositoryTarget {
+export function getRepositoryTarget(): RepositoryTarget {
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
   const repo = process.env.GITHUB_REPO;
   const branch = process.env.GITHUB_BRANCH || 'deploy';
@@ -739,7 +739,13 @@ async function listLocalMedia(): Promise<MediaFileSummary[]> {
   return results.sort((a, b) => b.name.localeCompare(a.name));
 }
 
-async function githubRequest<T>(
+export class GitHubRequestError extends Error {
+  constructor(message: string, public readonly status: number) {
+    super(message);
+  }
+}
+
+export async function githubRequest<T>(
   target: Extract<RepositoryTarget, { mode: 'github' }>,
   endpoint: string,
   options: RequestInit & { allowNotFound?: boolean } = {},
@@ -766,7 +772,7 @@ async function githubRequest<T>(
   const data = responseText ? JSON.parse(responseText) : {};
 
   if (!response.ok) {
-    throw new Error(data.message || 'GitHub 写入失败。');
+    throw new GitHubRequestError(data.message || 'GitHub 写入失败。', response.status);
   }
 
   return data as T;

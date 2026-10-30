@@ -99,6 +99,23 @@
 }
 
 
+/* 主题切换的圆形扩张 / 收缩动画 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.dark::view-transition-old(root),
+:root:not(.dark)::view-transition-new(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root),
+:root:not(.dark)::view-transition-old(root) {
+  z-index: 2;
+}
+
 /* 自定义光标样式 */
 .custom-cursor,
 .custom-cursor * {

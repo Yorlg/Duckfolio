@@ -17,6 +17,7 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
   useSwipeNavigation();
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
+  const isPhotos = pathname === '/photos';
   const controls = (
     <div className="flex shrink-0 items-center gap-1 sm:gap-3">
       <LanguageToggle />
@@ -46,7 +47,9 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
           'relative z-10 flex w-full flex-1 flex-col',
           isAdmin
             ? 'z-auto mx-0 px-0'
-            : 'mx-auto px-4 sm:px-6 md:w-4/5 md:px-8 lg:w-3/4 xl:w-2/3',
+            : isPhotos
+              ? 'mx-auto px-4 sm:w-[90%] sm:px-0 lg:w-4/5 lg:max-w-[1600px]'
+              : 'mx-auto px-4 sm:px-6 md:w-4/5 md:px-8 lg:w-3/4 xl:w-2/3',
         )}
       >
         {children}

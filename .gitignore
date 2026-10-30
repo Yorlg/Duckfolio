@@ -42,8 +42,9 @@ yarn-error.log*
 # WebStorm
 .idea
 
-# 文章数据 - 仅在 main 分支忽略,deploy 分支需要包含
+# 内容数据 - main 分支忽略，deploy 分支需要包含
 /posts/
+/photos/
 
 # Local Codex dev server logs
 .codex-next-dev.*

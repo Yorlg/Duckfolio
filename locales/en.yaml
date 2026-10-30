@@ -3,6 +3,7 @@ nav:
   links: Friends
   blog: Blog
   projects: Projects
+  photos: Photos
 profile:
   greeting: "Hello, "
   introduction: "I'm "
@@ -14,6 +15,19 @@ projects:
   heading: Projects
   description: Projects that I created or maintain.
   categories: Project categories
+photos:
+  heading: Photos
+  showOriginal: Show original proportions
+  showSquare: Show square grid
+  openPhoto: "Enlarge photo: {{name}}"
+  photoNumber: "Photo {{number}}"
+  position: "Photo {{current}} of {{total}}"
+  close: Close photo
+  previous: Previous photo
+  next: Next photo
+  empty: No photos yet. More moments to come.
+  loadError: Unable to load photo
+  loadMore: Load more photos
 blog:
   description: Notes on ideas, discoveries, and everyday life.
   empty: No posts yet
@@ -26,6 +40,39 @@ theme:
   switchToLight: Switch to light mode
   switchToDark: Switch to dark mode
 admin:
+  photoManagement: Photos
+  viewPhotoGallery: View gallery
+  savePhotos: Save gallery
+  photoSaveHint: Uploads are added to the gallery. Save changes to descriptions, order, and visibility. Hidden photos keep their original files. GitHub changes appear after deployment.
+  uploadPhotos: Upload photos
+  uploadingPhotos: "Uploading {{current}} / {{total}}"
+  chooseFromMediaLibrary: Choose from media library
+  selectPhotosFromLibrary: Select photos to copy to the gallery. Original files stay in the media library.
+  addPhotoToGallery: "Add to gallery: {{name}}"
+  noGalleryPhotos: Upload photos or choose from the media library to start your gallery.
+  photoDescription: Description
+  photoDescriptionPlaceholder: Describe this moment…
+  movePhotoEarlier: Move earlier
+  movePhotoLater: Move later
+  hidePhoto: Hide photo
+  showPhoto: Show photo
+  photoHidden: Hidden from the public gallery after saving
+  photosUploaded: "{{count}} photo(s) added. GitHub changes appear after deployment."
+  photosSaved: Gallery saved.
+  photosSavedGitHub: Gallery saved to the repository. Waiting for deployment.
+  failedToLoadPhotos: Unable to load the photo list.
+  failedToSavePhotos: Unable to save the gallery.
+  retryLoadPhotos: Reload
+  photoOperationFailed: Photo operation failed.
+  photoMetadataInvalid: A photo JSON file is invalid. Fix it and reload.
+  photoDirectoryTooLarge: The photo directory is too large. Split it into year folders.
+  invalidPhotoPath: Invalid photo path.
+  invalidPhotoTimestamp: Invalid photo timestamp. Select the photos again to upload.
+  invalidPhotoList: Invalid photo list.
+  photoNotFound: A photo no longer exists. Reload the gallery.
+  photoReadFailed: Unable to read the photo.
+  photoUnsupportedType: "{{name}}: please use JPG, PNG, WebP, AVIF, or GIF."
+  photoTooLarge: "{{name}}: photos must be 50 MB or smaller."
   dashboard: Dashboard
   homepageStyle: Homepage style
   classicHomepageStyle: Classic — large portrait and introduction

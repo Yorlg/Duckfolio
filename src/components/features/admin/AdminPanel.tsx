@@ -10,6 +10,7 @@ import {
 } from 'react';
 import {
   BarChart3,
+  Camera,
   ChevronDown,
   Eye,
   EyeOff,
@@ -41,6 +42,7 @@ import {
 import { ConfigPanel } from './ConfigPanel';
 import { DashboardPanel } from './DashboardPanel';
 import { MediaPanel } from './MediaPanel';
+import { PhotosPanel } from './PhotosPanel';
 import { PostEditorPanel } from './PostEditorPanel';
 import { PostsPanel } from './PostsPanel';
 import type {
@@ -76,6 +78,7 @@ export function AdminPanel() {
   const [config, setConfig] = useState<ProfileConfig>(emptyConfig);
   const [isPublishing, setIsPublishing] = useState(false);
   const [isSavingConfig, setIsSavingConfig] = useState(false);
+  const [photosVisited, setPhotosVisited] = useState(false);
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
   const [posts, setPosts] = useState<AdminPostSummary[]>([]);
   const [post, setPost] = useState(createEmptyPostForm);
@@ -547,7 +550,8 @@ export function AdminPanel() {
           repo?: string;
         };
       }>(response, t("failedToSaveConfiguration"));
-      setConfig(preparedConfig);
+      // Keep edits made while this save was in flight.
+      setConfig((current) => current === config ? preparedConfig : current);
 
       notify(
         data.result
@@ -718,6 +722,12 @@ export function AdminPanel() {
               onClick={() => setTab('media')}
             />
             <NavButton
+              active={tab === 'photos'}
+              icon={<Camera size={18} />}
+              label={t('photoManagement')}
+              onClick={() => { setPhotosVisited(true); setTab('photos'); }}
+            />
+            <NavButton
               active={tab === 'config'}
               icon={<Settings2 size={18} />}
               label={t("siteConfiguration")}
@@ -752,7 +762,7 @@ export function AdminPanel() {
             />
           ) : tab === 'media' ? (
             <MediaPanel adminToken={adminToken} />
-          ) : (
+          ) : tab === 'photos' ? null : (
             <ConfigPanel
               adminToken={adminToken}
               config={config}
@@ -760,6 +770,11 @@ export function AdminPanel() {
               onConfigChange={setConfig}
               onSave={saveConfig}
             />
+          )}
+          {photosVisited && (
+            <div hidden={tab !== 'photos'}>
+              <PhotosPanel adminToken={adminToken} />
+            </div>
           )}
           </div>
         </div>

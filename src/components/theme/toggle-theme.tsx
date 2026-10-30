@@ -2,7 +2,8 @@
 
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { flushSync } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +12,7 @@ export function ModeToggle() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const isTransitioning = useRef(false);
 
   useEffect(() => {
     setMounted(true);
@@ -38,8 +40,61 @@ export function ModeToggle() {
     });
   };
 
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  const toggleTheme = async (event: MouseEvent<HTMLButtonElement>) => {
+    if (isTransitioning.current) return;
+
+    const isDark = resolvedTheme === 'dark';
+    const nextTheme = isDark ? 'light' : 'dark';
+
+    if (
+      typeof document.startViewTransition !== 'function' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      setTheme(nextTheme);
+      return;
+    }
+
+    const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+    const x = event.detail === 0 ? left + width / 2 : event.clientX;
+    const y = event.detail === 0 ? top + height / 2 : event.clientY;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+    const clipPath = [
+      `circle(0px at ${x}px ${y}px)`,
+      `circle(${endRadius}px at ${x}px ${y}px)`,
+    ];
+
+    isTransitioning.current = true;
+
+    try {
+      const transition = document.startViewTransition(() => {
+        flushSync(() => setTheme(nextTheme));
+      });
+
+      await Promise.all([
+        transition.ready.then(() => {
+          document.documentElement.animate(
+            { clipPath: isDark ? [...clipPath].reverse() : clipPath },
+            {
+              duration: 400,
+              easing: 'ease-out',
+              fill: 'forwards',
+              pseudoElement: isDark
+                ? '::view-transition-old(root)'
+                : '::view-transition-new(root)',
+            },
+          );
+        }),
+        transition.finished,
+      ]);
+    } catch {
+      // A skipped or unsupported transition must still switch the theme.
+      setTheme(nextTheme);
+    } finally {
+      isTransitioning.current = false;
+    }
   };
 
   const label = t(resolvedTheme === 'dark' ? 'theme.switchToLight' : 'theme.switchToDark');
